@@ -7,17 +7,9 @@ import { createSSRApp, DefineComponent, h } from 'vue';
 import { renderToString } from 'vue/server-renderer';
 import PersistentLayout from './layouts/PersistentLayout.vue';
 
-const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
-
 createServer(
     (page) => {
-        const head = createHead({
-            init: [
-                {
-                    titleTemplate: `%s | ${appName}`,
-                },
-            ],
-        });
+        const head = createHead();
         return createInertiaApp({
             page,
             render: renderToString,
