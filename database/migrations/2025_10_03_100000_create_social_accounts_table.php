@@ -16,8 +16,8 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->enum('provider', SocialiteProviderEnum::cases());
             $table->string('provider_id');
-            $table->string('token', 255)->nullable();
-            $table->string('refresh_token', 255)->nullable();
+            $table->text('token')->nullable();
+            $table->text('refresh_token')->nullable();
             $table->timestamps();
 
             $table->unique(['provider', 'provider_id']);
