@@ -1,0 +1,63 @@
+name: tests
+
+on:
+  push:
+    branches:
+      - develop
+      - main
+  pull_request:
+    branches:
+      - develop
+      - main
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.4
+          tools: composer:v2
+          coverage: xdebug
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '25'
+          cache: 'npm'
+
+      - name: Install Node Dependencies
+        run: npm ci
+
+      - name: Install Dependencies
+        run: composer install --no-interaction --prefer-dist --optimize-autoloader
+
+      - name: Copy Environment File
+        run: cp .env.example .env
+
+      - name: Generate Application Key
+        run: php artisan key:generate
+
+      - name: Build Assets
+        run: npm run build
+
+      - name: Tests
+        env:
+          STRIPE_KEY: ${{ secrets.STRIPE_KEY }}
+          STRIPE_SECRET: ${{ secrets.STRIPE_SECRET }}
+          STRIPE_PRICE_PREMIUM_MONTH: ${{ secrets.STRIPE_PRICE_PREMIUM_MONTH }}
+          STRIPE_PRICE_PREMIUM_YEAR: ${{ secrets.STRIPE_PRICE_PREMIUM_YEAR }}
+          STRIPE_PRICE_PRO_MONTH: ${{ secrets.STRIPE_PRICE_PRO_MONTH }}
+          STRIPE_PRICE_PRO_YEAR: ${{ secrets.STRIPE_PRICE_PRO_YEAR }}
+        run: ./vendor/bin/pest
+
+      - name: Larastan
+        run: ./vendor/bin/phpstan analyse --memory-limit=2G
+
+      - name: Pint
+        run: ./vendor/bin/pint

@@ -1,0 +1,9 @@
+{
+    "password-updated": "assword-updated",
+    "profile-information-updated": "rofile-information-updated",
+    "two-factor-authentication-confirmed": "two-factor-authentication-confirmed",
+    "two-factor-authentication-disabled": "two-factor-authentication-disabled",
+    "two-factor-authentication-enabled": "two-factor-authentication-enabled",
+    "verification-link-sent": "verification-link-sent",
+    "recovery-codes-generated": "recovery-codes-generated"
+}
