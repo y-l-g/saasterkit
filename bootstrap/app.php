@@ -30,16 +30,13 @@ return Application::configure(basePath: dirname(__DIR__))
             'stripe/*',
         ]);
 
-        if (($_ENV['APP_ENV'] ?? 'production') === 'local') {
-            $middleware->trustProxies(
-                at: '*',
-                headers: Request::HEADER_X_FORWARDED_FOR |
-                Request::HEADER_X_FORWARDED_HOST |
-                Request::HEADER_X_FORWARDED_PORT |
-                Request::HEADER_X_FORWARDED_PROTO |
-                Request::HEADER_X_FORWARDED_AWS_ELB
-            );
-        }
+        $middleware->trustProxies(
+            at: '*',
+            headers: Request::HEADER_X_FORWARDED_FOR |
+            Request::HEADER_X_FORWARDED_HOST |
+            Request::HEADER_X_FORWARDED_PORT |
+            Request::HEADER_X_FORWARDED_PROTO
+        );
 
         $middleware->alias([
             'has.password' => EnsureUserHasPassword::class,
