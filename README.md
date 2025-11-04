@@ -1,6 +1,6 @@
 # Another Saas Starter Kit
 
-> Launch your next SaaS faster than ever. A production-ready, feature-rich boilerplate built on a solid architectural foundation.
+Launch your next SaaS faster than ever. A production-ready, feature-rich boilerplate built on a solid architectural foundation.
 
 ## ✨ Core Features
 
