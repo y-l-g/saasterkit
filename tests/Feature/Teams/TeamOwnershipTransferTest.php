@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-use App\Mail\TeamOwnershipInvitationMail;
 use App\Models\Team;
 use App\Models\User;
-use Illuminate\Support\Facades\Mail;
+use App\Notifications\TeamOwnershipTransferNotification;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\URL;
 
 use function Pest\Laravel\actingAs;
@@ -13,7 +13,7 @@ use function Pest\Laravel\actingAs;
 uses(\Illuminate\Foundation\Testing\RefreshDatabase::class);
 
 it('allows the team owner to send an ownership transfer invitation', function (): void {
-    Mail::fake();
+    Notification::fake();
     $owner = User::factory()->create();
     $team = Team::factory()->create(['user_id' => $owner->id]);
     $member = User::factory()->create();
@@ -23,7 +23,10 @@ it('allows the team owner to send an ownership transfer invitation', function ()
         ->post(route('teams.ownership.invitations.send', $team), ['email' => $member->email])
         ->assertSessionHas('success');
 
-    Mail::assertQueued(TeamOwnershipInvitationMail::class);
+    Notification::assertSentTo(
+        $member,
+        TeamOwnershipTransferNotification::class
+    );
 });
 
 it('allows the recipient to accept the ownership transfer', function (): void {

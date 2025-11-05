@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-use App\Mail\TeamInvitationMail;
 use App\Models\Team;
 use App\Models\TeamInvitation;
 use App\Models\User;
-use Illuminate\Support\Facades\Mail;
+use App\Notifications\TeamInvitationNotification;
+use Illuminate\Support\Facades\Notification;
 
 use function Pest\Laravel\actingAs;
 use function Pest\Laravel\assertDatabaseHas;
@@ -15,7 +15,7 @@ use function Pest\Laravel\assertDatabaseMissing;
 uses(\Illuminate\Foundation\Testing\RefreshDatabase::class);
 
 beforeEach(function (): void {
-    Mail::fake();
+    Notification::fake();
     $this->owner = User::factory()->create();
     $this->team = Team::factory()->create(['user_id' => $this->owner->id]);
 });
@@ -29,8 +29,15 @@ it('allows an authorized user to send a team invitation', function (): void {
         ->assertSessionHas('success');
 
     assertDatabaseHas('team_invitations', ['email' => 'new@member.com']);
-    Mail::assertQueued(TeamInvitationMail::class);
+
+    Notification::assertSentOnDemand(
+        TeamInvitationNotification::class,
+        function ($notification, $channels, $notifiable) {
+            return $notifiable->routes['mail'] === 'new@member.com';
+        }
+    );
 });
+
 
 it('fails if the user is already a member of the team', function (): void {
     $member = User::factory()->create();
