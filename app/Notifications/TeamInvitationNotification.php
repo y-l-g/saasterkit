@@ -19,7 +19,8 @@ class TeamInvitationNotification extends Notification implements ShouldQueue
      */
     public function __construct(
         public readonly TeamInvitation $invitation
-    ) {}
+    ) {
+    }
 
     /**
      * Get the notification's delivery channels.
@@ -43,8 +44,7 @@ class TeamInvitationNotification extends Notification implements ShouldQueue
         return (new MailMessage)
             ->subject(Lang::get('Team Invitation'))
             ->line(Lang::get('You have been invited to join the **:team** team!', ['team' => $this->invitation->team->name]))
-            ->line(Lang::get('If you do not have an account, you may create one by clicking the button below. After creating an account, you may click the invitation acceptance button in this email to accept the team invitation:'))
-            ->action(Lang::get('Create Account'), route('register'))
+            ->line(Lang::get('If you do not have an account, you may create one by clicking the button below.'))
             ->line(Lang::get('If you already have an account, you may accept this invitation by clicking the button below:'))
             ->action(Lang::get('Accept Invitation'), $acceptUrl)
             ->line(Lang::get('If you did not expect to receive an invitation to this team, you may discard this email.'));
