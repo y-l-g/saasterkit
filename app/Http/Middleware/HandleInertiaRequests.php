@@ -25,8 +25,8 @@ class HandleInertiaRequests extends Middleware
 
         if ($user) {
             $user->load([
-                'teams.defaultSubscription',
-                'currentTeam',
+                'teams',
+                'currentTeam.defaultSubscription',
                 'notifications' => fn ($query) => $query->wherePivotNull('dismissed_at')->latest()->limit(20),
             ]);
         }

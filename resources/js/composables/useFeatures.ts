@@ -1,11 +1,9 @@
 import { usePage } from '@inertiajs/vue3';
 
-interface UseFeaturesReturn {
-    hasFeature: (featureName: string) => boolean;
-}
-
-export function useFeatures(): UseFeaturesReturn {
-    const hasFeature = (featureName: string): boolean => {
+export function useFeatures() {
+    const hasFeature = (
+        featureName: App.Enums.Billing.FeatureEnum,
+    ): boolean => {
         const features =
             usePage().props.user?.currentTeam?.subscription?.plan?.features ??
             [];
