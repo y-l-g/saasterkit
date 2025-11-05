@@ -4,15 +4,16 @@ import AuthBase from '@/layouts/AuthLayout.vue';
 import { login } from '@/routes';
 import { redirect } from '@/routes/provider';
 import { store } from '@/routes/register';
-import { Form, Head } from '@inertiajs/vue3';
+import { Form } from '@inertiajs/vue3';
 import IBiGithub from '~icons/bi/github';
 import IBiGoogle from '~icons/bi/google';
+useHead({
+    title: 'Register',
+});
 </script>
 
 <template>
     <AuthBase title="Sign in" description="Create your account">
-        <Head title="Register" />
-
         <Form
             :action="store()"
             :reset-on-success="['password', 'password_confirmation']"

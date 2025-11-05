@@ -2,8 +2,12 @@
 import CardInfo from '@/components/common/CardInfo.vue';
 import AuthLayout from '@/layouts/AuthLayout.vue';
 import { store } from '@/routes/two-factor/login';
-import { Form, Head } from '@inertiajs/vue3';
+import { Form } from '@inertiajs/vue3';
 import { computed, ref } from 'vue';
+
+useHead({
+    title: 'Two-Factor Authentication',
+});
 
 interface AuthConfigContent {
     title: string;
@@ -46,7 +50,6 @@ const codeValue = computed<string>(() => code.value.join(''));
         :title="authConfigContent.title"
         :description="authConfigContent.description"
     >
-        <Head title="Two-Factor Authentication" />
         <template v-if="!showRecoveryInput">
             <Form
                 v-bind="store.form()"

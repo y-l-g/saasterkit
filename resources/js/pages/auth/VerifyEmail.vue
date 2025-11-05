@@ -2,7 +2,11 @@
 import AuthLayout from '@/layouts/AuthLayout.vue';
 import { logout } from '@/routes';
 import verification from '@/routes/verification';
-import { Form, Head } from '@inertiajs/vue3';
+import { Form } from '@inertiajs/vue3';
+
+useHead({
+    title: 'Email verification',
+});
 </script>
 
 <template>
@@ -10,8 +14,6 @@ import { Form, Head } from '@inertiajs/vue3';
         title="Verify email"
         description="Please verify your email address by clicking on the link we just emailed to you."
     >
-        <Head title="Email verification" />
-
         <Form
             v-bind="verification.send.form()"
             class="flex justify-between"

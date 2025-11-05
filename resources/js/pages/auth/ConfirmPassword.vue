@@ -1,7 +1,11 @@
 <script setup lang="ts">
 import AuthLayout from '@/layouts/AuthLayout.vue';
 import { store } from '@/routes/password/confirm';
-import { Form, Head } from '@inertiajs/vue3';
+import { Form } from '@inertiajs/vue3';
+
+useHead({
+    title: 'Confirm password',
+});
 </script>
 
 <template>
@@ -9,8 +13,6 @@ import { Form, Head } from '@inertiajs/vue3';
         title="Confirm your password"
         description="This is a secure area of the application. Please confirm your password before continuing."
     >
-        <Head title="Confirm password" />
-
         <Form
             v-bind="store.form()"
             reset-on-success

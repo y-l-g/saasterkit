@@ -3,7 +3,10 @@ import CardInfo from '@/components/common/CardInfo.vue';
 import AuthLayout from '@/layouts/AuthLayout.vue';
 import { login } from '@/routes';
 import password from '@/routes/password';
-import { Form, Head } from '@inertiajs/vue3';
+import { Form } from '@inertiajs/vue3';
+useHead({
+    title: 'Forgot password',
+});
 </script>
 
 <template>
@@ -11,7 +14,6 @@ import { Form, Head } from '@inertiajs/vue3';
         title="Forgot password"
         description="Enter your email to receive a password reset link"
     >
-        <Head title="Forgot password" />
         <Form
             class="space-y-4"
             v-bind="password.email.form()"

@@ -6,6 +6,7 @@ import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import type { DefineComponent } from 'vue';
 import { createApp, h } from 'vue';
 import PersistentLayout from './layouts/PersistentLayout.vue';
+
 createInertiaApp({
     resolve: (name) => {
         const page = resolvePageComponent(
@@ -21,7 +22,6 @@ createInertiaApp({
         createApp({ render: () => h(App, props) })
             .use(plugin)
             .use(ui)
-
             .mount(el);
     },
     progress: false,
