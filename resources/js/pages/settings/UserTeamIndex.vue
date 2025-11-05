@@ -11,7 +11,6 @@ defineProps<{
 }>();
 
 const breadcrumbs = computed(() => [
-    { label: 'Teams' },
     {
         label: 'My Teams',
     },
