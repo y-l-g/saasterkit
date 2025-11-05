@@ -39,7 +39,7 @@ final class TeamData extends Data
             userId: $team->user_id,
             createdAt: $team->created_at,
             owner: Lazy::whenLoaded('owner', $team, fn () => TeamMemberData::from($team->owner)),
-            invitations: Lazy::whenLoaded('users', $team, fn () => TeamInvitationData::collect($team->teamInvitations)),
+            invitations: Lazy::whenLoaded('teamInvitations', $team, fn () => TeamInvitationData::collect($team->teamInvitations)),
             subscription: Lazy::whenLoaded('defaultSubscription', $team, fn (): ?SubscriptionData => $team->defaultSubscription?->valid() ? SubscriptionData::fromModel($team->defaultSubscription) : null),
 
         );

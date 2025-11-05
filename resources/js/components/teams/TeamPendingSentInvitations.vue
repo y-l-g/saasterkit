@@ -22,16 +22,28 @@ const cancelTeamInvitation = (
 
 <template>
     <UPageCard
-        v-if="team.invitations && team.invitations.length > 0"
         title="Pending Team Invitations"
         description="These people have been invited to your team and have been sent an invitation email. They may join the team by accepting the email invitation."
         variant="soft"
     >
-        <div class="space-y-4">
+        <template
+            #description
+            v-if="team.invitations && team.invitations.length > 0"
+            >These people have been invited to your team and have been sent an
+            invitation email. They may join the team by accepting the email
+            invitation.</template
+        >
+        <template #description v-else
+            >You have no pending invitations for your team</template
+        >
+        <div
+            class="divide-y divide-muted"
+            v-if="team.invitations && team.invitations.length > 0"
+        >
             <div
                 v-for="invitation in team.invitations"
                 :key="invitation.id"
-                class="flex items-center justify-between"
+                class="flex items-center justify-between py-4"
             >
                 <p class="text-toned">{{ invitation.email }}</p>
                 <UButton
