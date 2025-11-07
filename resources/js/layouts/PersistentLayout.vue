@@ -5,11 +5,18 @@ import { useUrlQueryToasts } from '@/composables/useUrlQueryToasts';
 import { useUserTheme } from '@/composables/useUserTheme';
 import { onMounted } from 'vue';
 
+const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
+
 onMounted(() => {
     useFlashMessages();
     useUrlQueryToasts();
     useCookieConsent();
     useUserTheme();
+});
+
+useHead({
+    titleTemplate: `%s - ${appName}`,
+    title: appName,
 });
 </script>
 

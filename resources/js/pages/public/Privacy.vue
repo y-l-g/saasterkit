@@ -1,18 +1,19 @@
 <script setup lang="ts">
 import PublicLayout from '@/layouts/PublicLayout.vue';
-import { useHead } from '@unhead/vue';
 
 defineProps<{ content: string }>();
 
-useHead({
+useSeoMeta({
     title: 'Privacy',
+    description: 'Privacy page of Saasterkit',
 });
 </script>
 
 <template>
     <PublicLayout>
-        <UPageSection>
-            <article v-html="content" class="prose dark:prose-invert"></article
-        ></UPageSection>
+        <UContainer
+            v-html="content"
+            class="my-20 prose max-w-3xl dark:prose-invert"
+        />
     </PublicLayout>
 </template>
