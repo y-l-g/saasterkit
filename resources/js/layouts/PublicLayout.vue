@@ -9,6 +9,19 @@ import ILucideGithub from '~icons/lucide/github';
 
 const page = usePage();
 
+const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
+const appUrl = import.meta.env.VITE_APP_URL;
+
+useSeoMeta({
+    titleTemplate: '%s - %siteName',
+    description: 'The default description for your SaaS.',
+    ogDescription: 'The default description for your SaaS.',
+    ogTitle: appName,
+    ogImage: `${appUrl}/seo_image.jpg`,
+    twitterImage: `${appUrl}/seo_image.jpg`,
+    twitterCard: 'summary_large_image',
+});
+
 const breakpoints = useBreakpoints({
     xs: 410,
 });

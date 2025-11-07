@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import PricingPlans from '@/components/billing/PricingPlans.vue';
-import { usePageSeo } from '@/composables/usePageSeo';
 import PublicLayout from '@/layouts/PublicLayout.vue';
-import { home, register } from '@/routes';
+import { register } from '@/routes';
 import { show } from '@/routes/billing';
 import { router, usePage } from '@inertiajs/vue3';
 import { motion } from 'motion-v';
@@ -23,10 +22,9 @@ const page = usePage();
 
 defineProps<{ plans: App.Data.Billing.PlanData[] }>();
 
-usePageSeo({
+useSeoMeta({
     title: 'Home',
     description: 'Another Saas Starter Kit',
-    url: home().url,
 });
 
 const isProcessing = ref(false);
