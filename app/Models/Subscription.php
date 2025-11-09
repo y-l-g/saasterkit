@@ -67,7 +67,6 @@ use Laravel\Cashier\Subscription as CashierSubscription;
  *
  * @mixin \Eloquent
  */
-#[UseEloquentBuilder(SubscriptionBuilder::class)]
 class Subscription extends CashierSubscription
 {
     /**
@@ -137,7 +136,7 @@ class Subscription extends CashierSubscription
     protected function planData(): Attribute
     {
         return Attribute::make(
-            get: fn (mixed $value, array $attributes) => app(PlanService::class)->findOrFailPlanByStripePriceId($attributes['stripe_price'])
+            get: fn(mixed $value, array $attributes) => app(PlanService::class)->findOrFailPlanByStripePriceId($attributes['stripe_price'])
         )->shouldCache();
     }
 
