@@ -25,8 +25,8 @@ Save weeks of development time with essential SaaS features already built, teste
 ## 🛠️ Tech Stack
 
 - **Backend**: Laravel 12
-- **Frontend**: Nuxt.js 3
-- **UI Framework**: Nuxt UI
+- **Frontend**: Vue 3
+- **UI Framework**: Nuxt UI 4
 - **Backend/Frontend Bridge**: Inertia.js
 - **Billing**: Laravel Cashier (Stripe)
 - **Authentication**: Laravel Fortify
