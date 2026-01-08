@@ -50,7 +50,7 @@
         "zod": "^4.3.4"
     },
     "optionalDependencies": {
-        "@rollup/rollup-linux-x64-gnu": "4.54.0",
+        "@rollup/rollup-linux-x64-gnu": "4.55.1",
         "@tailwindcss/oxide-linux-x64-gnu": "^4.1.18",
         "lightningcss-linux-x64-gnu": "^1.30.2"
     }
