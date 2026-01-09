@@ -1340,16 +1340,16 @@
         },
         {
             "name": "laravel/cashier",
-            "version": "v16.1.0",
+            "version": "v16.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/cashier-stripe.git",
-                "reference": "6d526c79ea0b0e664299e5a122811034fe75ece9"
+                "reference": "9634b60c196ef1a512aa4f9543b6c2a1d64dff85"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/cashier-stripe/zipball/6d526c79ea0b0e664299e5a122811034fe75ece9",
-                "reference": "6d526c79ea0b0e664299e5a122811034fe75ece9",
+                "url": "https://api.github.com/repos/laravel/cashier-stripe/zipball/9634b60c196ef1a512aa4f9543b6c2a1d64dff85",
+                "reference": "9634b60c196ef1a512aa4f9543b6c2a1d64dff85",
                 "shasum": ""
             },
             "require": {
@@ -1424,7 +1424,7 @@
                 "issues": "https://github.com/laravel/cashier/issues",
                 "source": "https://github.com/laravel/cashier"
             },
-            "time": "2025-12-03T00:26:48+00:00"
+            "time": "2026-01-06T16:30:29+00:00"
         },
         {
             "name": "laravel/fortify",
