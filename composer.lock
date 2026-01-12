@@ -1971,16 +1971,16 @@
         },
         {
             "name": "laravel/wayfinder",
-            "version": "v0.1.12",
+            "version": "v0.1.13",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/wayfinder.git",
-                "reference": "08285225df7f8a094789ad8f384ac6bad6712ff6"
+                "reference": "cc32fedd4744cdb64d018974ce92296e88fcdd0f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/wayfinder/zipball/08285225df7f8a094789ad8f384ac6bad6712ff6",
-                "reference": "08285225df7f8a094789ad8f384ac6bad6712ff6",
+                "url": "https://api.github.com/repos/laravel/wayfinder/zipball/cc32fedd4744cdb64d018974ce92296e88fcdd0f",
+                "reference": "cc32fedd4744cdb64d018974ce92296e88fcdd0f",
                 "shasum": ""
             },
             "require": {
@@ -2030,7 +2030,7 @@
                 "issues": "https://github.com/laravel/wayfinder/issues",
                 "source": "https://github.com/laravel/wayfinder"
             },
-            "time": "2025-09-08T17:03:10+00:00"
+            "time": "2026-01-12T19:57:57+00:00"
         },
         {
             "name": "league/commonmark",
