@@ -16,9 +16,7 @@ final readonly class AdminSubscriptionIndexShowController
 {
     public function __invoke(Request $request): Response
     {
-        // @phpstan-ignore-next-line
-        $subscriptions = QueryBuilder::for(Subscription::class, $request)
-            ->with(['team.owner'])
+        $subscriptions = QueryBuilder::for(Subscription::query()->with(['team.owner']), $request)
             ->allowedFilters([
                 AllowedFilter::scope('search'),
                 AllowedFilter::scope('period'),
