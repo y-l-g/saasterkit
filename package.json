@@ -35,7 +35,7 @@
     },
     "dependencies": {
         "@iconify-json/bi": "^1.2.7",
-        "@inertiajs/vue3": "^2.3.6",
+        "@inertiajs/vue3": "^3.0.0",
         "@nuxt/ui": "^4.3.0",
         "change-case": "^5.4.4",
         "class-variance-authority": "^0.7.1",
