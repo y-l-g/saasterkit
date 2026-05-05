@@ -11,7 +11,7 @@
         "lint": "eslint . --fix"
     },
     "devDependencies": {
-        "@eslint/js": "^9.39.0",
+        "@eslint/js": "^10.0.0",
         "@iconify-json/lucide": "^1.2.82",
         "@laravel/vite-plugin-wayfinder": "^0.1.7",
         "@tailwindcss/typography": "^0.5.19",
@@ -21,7 +21,7 @@
         "@vitejs/plugin-vue": "^6.0.3",
         "@vue/eslint-config-typescript": "^14.6.0",
         "concurrently": "^9.2.1",
-        "eslint": "^9.39.2",
+        "eslint": "^10.0.0",
         "eslint-config-prettier": "^10.1.8",
         "eslint-plugin-vue": "^10.6.2",
         "prettier": "^3.7.4",
