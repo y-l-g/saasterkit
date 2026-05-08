@@ -5213,16 +5213,16 @@
         },
         {
             "name": "spatie/laravel-typescript-transformer",
-            "version": "3.0.3",
+            "version": "3.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/laravel-typescript-transformer.git",
-                "reference": "402e8b9e522a9f30ce4bf2ad527573e12d1dda62"
+                "reference": "53ce01151bda3727de95f59549d4151b87c34a52"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/laravel-typescript-transformer/zipball/402e8b9e522a9f30ce4bf2ad527573e12d1dda62",
-                "reference": "402e8b9e522a9f30ce4bf2ad527573e12d1dda62",
+                "url": "https://api.github.com/repos/spatie/laravel-typescript-transformer/zipball/53ce01151bda3727de95f59549d4151b87c34a52",
+                "reference": "53ce01151bda3727de95f59549d4151b87c34a52",
                 "shasum": ""
             },
             "require": {
@@ -5275,7 +5275,7 @@
             ],
             "support": {
                 "issues": "https://github.com/spatie/laravel-typescript-transformer/issues",
-                "source": "https://github.com/spatie/laravel-typescript-transformer/tree/3.0.3"
+                "source": "https://github.com/spatie/laravel-typescript-transformer/tree/3.2.0"
             },
             "funding": [
                 {
@@ -5287,7 +5287,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-03-17T08:15:03+00:00"
+            "time": "2026-05-08T12:48:32+00:00"
         },
         {
             "name": "spatie/php-structure-discoverer",
