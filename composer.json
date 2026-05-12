@@ -25,7 +25,7 @@
     "require-dev": {
         "barryvdh/laravel-debugbar": "^4.2.8",
         "barryvdh/laravel-ide-helper": "^3.7.0",
-        "driftingly/rector-laravel": "^2.1",
+        "driftingly/rector-laravel": "^2.3.0",
         "fakerphp/faker": "^1.24",
         "larastan/larastan": "^3.8",
         "laravel/pail": "^1.2",
