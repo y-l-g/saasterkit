@@ -142,6 +142,10 @@ const features = [
             <UPageHero
                 title="Another Saas Starter Kit"
                 description="Launch your next SaaS faster than ever. A production-ready, feature-rich boilerplate built on a solid architectural foundation."
+                :ui="{
+                    container:
+                        'mt-[-50px] min-h-screen items-center justify-center ',
+                }"
             >
                 <template #links>
                     <motion.div
