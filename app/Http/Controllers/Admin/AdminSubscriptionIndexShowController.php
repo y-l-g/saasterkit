@@ -17,17 +17,17 @@ final readonly class AdminSubscriptionIndexShowController
     public function __invoke(Request $request): Response
     {
         $subscriptions = QueryBuilder::for(Subscription::query()->with(['team.owner']), $request)
-            ->allowedFilters([
+            ->allowedFilters(
                 AllowedFilter::scope('search'),
                 AllowedFilter::scope('period'),
                 AllowedFilter::scope('status'),
                 AllowedFilter::scope('plan'),
-            ])
-            ->allowedSorts([
+            )
+            ->allowedSorts(
                 'id',
                 'ends_at',
                 'created_at',
-            ])
+            )
             ->defaultSort('-created_at')
             ->paginate(10)
             ->withQueryString();
