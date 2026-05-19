@@ -1,11 +1,12 @@
 <?php
 
 declare(strict_types=1);
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 use function Pest\Laravel\artisan;
 use function Pest\Laravel\assertDatabaseHas;
 
-uses(\Illuminate\Foundation\Testing\RefreshDatabase::class);
+uses(RefreshDatabase::class);
 
 it('successfully creates a new admin user with valid inputs', function (): void {
     artisan('app:create-admin')

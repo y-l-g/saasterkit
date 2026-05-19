@@ -7,6 +7,7 @@ namespace App\Http\Requests\Auth;
 use App\Enums\Settings\ColorEnum;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\Enum;
 
 class AppearanceUpdateRequest extends FormRequest
 {
@@ -16,7 +17,7 @@ class AppearanceUpdateRequest extends FormRequest
     }
 
     /**
-     * @return array<string, array<int, \Illuminate\Validation\Rules\Enum|string>>
+     * @return array<string, array<int, Enum|string>>
      */
     public function rules(): array
     {

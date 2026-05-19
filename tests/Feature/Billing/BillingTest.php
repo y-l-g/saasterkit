@@ -5,10 +5,11 @@ declare(strict_types=1);
 use App\Models\Team;
 use App\Models\User;
 use App\Services\PlanService;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 use function Pest\Laravel\actingAs;
 
-uses(\Illuminate\Foundation\Testing\RefreshDatabase::class);
+uses(RefreshDatabase::class);
 
 it('allows a user to start a checkout session', function (): void {
     $user = User::factory()->create();
@@ -18,7 +19,7 @@ it('allows a user to start a checkout session', function (): void {
     $team->createAsStripeCustomer();
 
     /** @var PlanService $planService */
-    $planService = app(PlanService::class);
+    $planService = resolve(PlanService::class);
     $plan = $planService->all()->first();
     $priceId = $plan->prices['month'];
 

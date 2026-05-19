@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Models\SocialAccount;
 use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Socialite\Facades\Socialite;
 use Laravel\Socialite\Two\GoogleProvider;
 use Laravel\Socialite\Two\User as SocialiteUser;
@@ -13,7 +14,7 @@ use function Pest\Laravel\assertAuthenticatedAs;
 use function Pest\Laravel\assertDatabaseHas;
 use function Pest\Laravel\get;
 
-uses(\Illuminate\Foundation\Testing\RefreshDatabase::class);
+uses(RefreshDatabase::class);
 
 function mockSocialiteProvider(string $email = 'test@example.com', string $name = 'Test User', string $id = '12345'): void
 {

@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 use App\Models\Subscription;
 use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Inertia\Testing\AssertableInertia as Assert;
 
 use function Pest\Laravel\actingAs;
 
-uses(Illuminate\Foundation\Testing\RefreshDatabase::class);
+uses(RefreshDatabase::class);
 
 it('denies access to non admin users', function (): void {
     $user = User::factory()->create(['is_admin' => false]);

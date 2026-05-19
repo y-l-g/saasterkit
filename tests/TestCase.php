@@ -3,6 +3,9 @@
 namespace Tests;
 
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
+use Stripe\Checkout\Session;
+use Stripe\Customer;
+use Stripe\StripeClient;
 
 abstract class TestCase extends BaseTestCase
 {
@@ -17,7 +20,7 @@ abstract class TestCase extends BaseTestCase
 
     private function fakeStripe(): void
     {
-        $fake = new class extends \Stripe\StripeClient
+        $fake = new class extends StripeClient
         {
             public object $customers;
 
@@ -29,28 +32,28 @@ abstract class TestCase extends BaseTestCase
             {
                 $this->customers = new class
                 {
-                    public function create(array $options = [], array $requestOptions = []): \Stripe\Customer
+                    public function create(array $options = [], array $requestOptions = []): Customer
                     {
-                        return \Stripe\Customer::constructFrom(['id' => 'cus_test']);
+                        return Customer::constructFrom(['id' => 'cus_test']);
                     }
 
-                    public function update(string $id, array $options = []): \Stripe\Customer
+                    public function update(string $id, array $options = []): Customer
                     {
-                        return \Stripe\Customer::constructFrom(['id' => $id]);
+                        return Customer::constructFrom(['id' => $id]);
                     }
 
-                    public function retrieve(string $id, array $options = []): \Stripe\Customer
+                    public function retrieve(string $id, array $options = []): Customer
                     {
-                        return \Stripe\Customer::constructFrom(['id' => $id]);
+                        return Customer::constructFrom(['id' => $id]);
                     }
                 };
 
                 $this->checkout = (object) [
                     'sessions' => new class
                     {
-                        public function create(array $options = []): \Stripe\Checkout\Session
+                        public function create(array $options = []): Session
                         {
-                            return \Stripe\Checkout\Session::constructFrom([
+                            return Session::constructFrom([
                                 'id' => 'cs_test',
                                 'url' => 'https://checkout.stripe.com/test-session',
                             ]);
@@ -73,7 +76,7 @@ abstract class TestCase extends BaseTestCase
             }
         };
 
-        $this->app->bind(\Stripe\StripeClient::class, fn (): \Stripe\StripeClient => $fake);
+        $this->app->bind(StripeClient::class, fn (): StripeClient => $fake);
     }
 
     private function setTestPrices(): void

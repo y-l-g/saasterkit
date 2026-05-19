@@ -4,17 +4,19 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
 
 /**
  * @property int $id
  * @property string $new_owner_email
  * @property string $token
  * @property int $team_id
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \App\Models\Team $team
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property-read Team $team
  *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|TeamOwnershipInvitation newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|TeamOwnershipInvitation newQuery()
@@ -28,16 +30,15 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  *
  * @mixin \Eloquent
  */
+#[Fillable([
+    'team_id',
+    'new_owner_email',
+    'token',
+])]
 class TeamOwnershipInvitation extends Model
 {
-    protected $fillable = [
-        'team_id',
-        'new_owner_email',
-        'token',
-    ];
-
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<Team, $this>
+     * @return BelongsTo<Team, $this>
      */
     public function team(): BelongsTo
     {

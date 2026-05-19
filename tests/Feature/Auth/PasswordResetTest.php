@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 use App\Models\User;
 use Illuminate\Auth\Notifications\ResetPassword;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Notification;
 
 use function Pest\Laravel\get;
 use function Pest\Laravel\post;
 
-uses(\Illuminate\Foundation\Testing\RefreshDatabase::class);
+uses(RefreshDatabase::class);
 
 it('can render the reset password link screen', function (): void {
     get(route('password.request'))->assertOk();

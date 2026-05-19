@@ -18,7 +18,7 @@ trait HasPlanFeatures
         if (! $subscription?->valid()) {
             return false;
         }
-        $plan = app(PlanService::class)->getPlanByStripePriceId($subscription->stripe_price);
+        $plan = resolve(PlanService::class)->getPlanByStripePriceId($subscription->stripe_price);
 
         if (! $plan) {
             return false;

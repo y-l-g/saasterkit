@@ -12,7 +12,9 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Gate;
 
 /** @mixin User */
@@ -38,7 +40,7 @@ trait HasTeams
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany<Team, $this>
+     * @return HasMany<Team, $this>
      */
     public function ownedTeams(): HasMany
     {
@@ -46,7 +48,7 @@ trait HasTeams
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany<\App\Models\Team, $this, \Illuminate\Database\Eloquent\Relations\Pivot>
+     * @return BelongsToMany<Team, $this, Pivot>
      */
     public function teams(): BelongsToMany
     {
@@ -96,7 +98,7 @@ trait HasTeams
     {
         $cacheKey = "user.{$this->id}.team.{$team->id}.permissions";
 
-        return Cache::remember($cacheKey, \Illuminate\Support\Facades\Date::now()->addHours(24), function () use ($team) {
+        return Cache::remember($cacheKey, Date::now()->addHours(24), function () use ($team) {
             if (! $this->belongsToTeam($team)) {
                 return [];
             }

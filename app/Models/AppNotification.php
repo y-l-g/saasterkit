@@ -4,17 +4,21 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Database\Factories\AppNotificationFactory;
+use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Support\Carbon;
 
 /**
  * @property int $id
  * @property string $title
  * @property string $body
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\User> $users
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property-read Collection<int, User> $users
  * @property-read int|null $users_count
  *
  * @method static \Database\Factories\AppNotificationFactory factory($count = null, $state = [])
@@ -29,18 +33,17 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  *
  * @mixin \Eloquent
  */
+#[Fillable([
+    'title',
+    'body',
+])]
 class AppNotification extends Model
 {
-    /** @use HasFactory<\Database\Factories\AppNotificationFactory> */
+    /** @use HasFactory<AppNotificationFactory> */
     use HasFactory;
 
-    protected $fillable = [
-        'title',
-        'body',
-    ];
-
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany<User, $this>
+     * @return BelongsToMany<User, $this>
      */
     public function users(): BelongsToMany
     {

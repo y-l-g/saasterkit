@@ -10,8 +10,11 @@ use Database\Factories\SubscriptionFactory;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
 use Laravel\Cashier\Subscription as CashierSubscription;
+use Laravel\Cashier\SubscriptionItem;
 
 /**
  * @property int $id
@@ -21,16 +24,16 @@ use Laravel\Cashier\Subscription as CashierSubscription;
  * @property string $stripe_status
  * @property string|null $stripe_price
  * @property int|null $quantity
- * @property \Illuminate\Support\Carbon|null $trial_ends_at
- * @property \Illuminate\Support\Carbon|null $ends_at
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \Laravel\Cashier\SubscriptionItem> $items
+ * @property Carbon|null $trial_ends_at
+ * @property Carbon|null $ends_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property-read Collection<int, SubscriptionItem> $items
  * @property-read int|null $items_count
- * @property-read \App\Models\Team|null $owner
+ * @property-read Team|null $owner
  * @property-read mixed $plan_data
- * @property-read \App\Models\Team|null $team
- * @property-read \App\Models\Team|null $user
+ * @property-read Team|null $team
+ * @property-read Team|null $user
  *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Subscription active()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Subscription canceled()
@@ -95,7 +98,7 @@ class Subscription extends CashierSubscription
     protected function plan(Builder $query, string $planName): void
     {
         /** @var PlanService $planService */
-        $planService = app(PlanService::class);
+        $planService = resolve(PlanService::class);
 
         $plan = $planService->all()->firstWhere('name.value', $planName);
         if ($plan) {
@@ -110,7 +113,7 @@ class Subscription extends CashierSubscription
     protected function period(Builder $query, string $period): void
     {
         /** @var PlanService $planService */
-        $planService = app(PlanService::class);
+        $planService = resolve(PlanService::class);
 
         $priceIds = collect($planService->all())
             ->pluck('prices')
@@ -122,7 +125,7 @@ class Subscription extends CashierSubscription
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<Team, $this>
+     * @return BelongsTo<Team, $this>
      */
     public function team(): BelongsTo
     {
@@ -135,7 +138,7 @@ class Subscription extends CashierSubscription
     protected function planData(): Attribute
     {
         return Attribute::make(
-            get: fn(mixed $value, array $attributes) => app(PlanService::class)->findOrFailPlanByStripePriceId($attributes['stripe_price'])
+            get: fn (mixed $value, array $attributes) => resolve(PlanService::class)->findOrFailPlanByStripePriceId($attributes['stripe_price'])
         )->shouldCache();
     }
 

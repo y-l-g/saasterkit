@@ -5,18 +5,21 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Enums\Teams\RoleEnum;
+use Database\Factories\TeamInvitationFactory;
+use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
 
 /**
  * @property int $id
  * @property int $team_id
  * @property string $email
  * @property RoleEnum|null $role
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \App\Models\Team $team
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property-read Team $team
  *
  * @method static \Database\Factories\TeamInvitationFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder<static>|TeamInvitation newModelQuery()
@@ -31,15 +34,14 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  *
  * @mixin \Eloquent
  */
+#[Fillable([
+    'email',
+    'role',
+])]
 class TeamInvitation extends Model
 {
-    /** @use HasFactory<\Database\Factories\TeamInvitationFactory> */
+    /** @use HasFactory<TeamInvitationFactory> */
     use HasFactory;
-
-    protected $fillable = [
-        'email',
-        'role',
-    ];
 
     protected function casts(): array
     {
@@ -49,7 +51,7 @@ class TeamInvitation extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<\App\Models\Team, $this>
+     * @return BelongsTo<Team, $this>
      */
     public function team(): BelongsTo
     {

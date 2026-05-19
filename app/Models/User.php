@@ -8,10 +8,13 @@ use App\Models\Concerns\HasTeams;
 use Database\Factories\UserFactory;
 use Illuminate\Auth\MustVerifyEmail;
 use Illuminate\Contracts\Auth\MustVerifyEmail as MustVerifyEmailContract;
+use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
@@ -36,15 +39,15 @@ use Laravel\Socialite\Two\User as SocialiteUser;
  * @property string|null $neutral_color
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property-read \App\Models\Team|null $currentTeam
- * @property-read Collection<int, \App\Models\AppNotification> $notifications
+ * @property-read Team|null $currentTeam
+ * @property-read Collection<int, AppNotification> $notifications
  * @property-read int|null $notifications_count
- * @property-read Collection<int, \App\Models\Team> $ownedTeams
+ * @property-read Collection<int, Team> $ownedTeams
  * @property-read int|null $owned_teams_count
- * @property-read Collection<int, \App\Models\SocialAccount> $socialAccounts
+ * @property-read Collection<int, SocialAccount> $socialAccounts
  * @property-read int|null $social_accounts_count
- * @property-read \App\Models\TeamUser|null $pivot
- * @property-read Collection<int, \App\Models\Team> $teams
+ * @property-read TeamUser|null $pivot
+ * @property-read Collection<int, Team> $teams
  * @property-read int|null $teams_count
  *
  * @method static \Database\Factories\UserFactory factory($count = null, $state = [])
@@ -70,28 +73,26 @@ use Laravel\Socialite\Two\User as SocialiteUser;
  *
  * @mixin \Eloquent
  */
+#[Fillable([
+    'name',
+    'email',
+    'password',
+    'primary_color',
+    'secondary_color',
+    'neutral_color',
+    'current_team_id',
+])]
+#[Hidden([
+    'password',
+    'remember_token',
+    'two_factor_secret',
+    'two_factor_recovery_codes',
+    'current_team_id',
+])]
 class User extends Authenticatable implements MustVerifyEmailContract
 {
     /** @use HasFactory<UserFactory> */
     use HasFactory, HasTeams, MustVerifyEmail, Notifiable, TwoFactorAuthenticatable;
-
-    protected $fillable = [
-        'name',
-        'email',
-        'password',
-        'primary_color',
-        'secondary_color',
-        'neutral_color',
-        'current_team_id',
-    ];
-
-    protected $hidden = [
-        'password',
-        'remember_token',
-        'two_factor_secret',
-        'two_factor_recovery_codes',
-        'current_team_id',
-    ];
 
     protected function casts(): array
     {
@@ -112,7 +113,7 @@ class User extends Authenticatable implements MustVerifyEmailContract
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany<\App\Models\AppNotification, $this, \Illuminate\Database\Eloquent\Relations\Pivot>
+     * @return BelongsToMany<AppNotification, $this, Pivot>
      */
     public function notifications(): BelongsToMany
     {

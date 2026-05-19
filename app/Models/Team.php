@@ -6,13 +6,18 @@ namespace App\Models;
 
 use App\Models\Concerns\HasPlanFeatures;
 use App\Observers\TeamObserver;
+use Database\Factories\TeamFactory;
+use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\Pivot;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Laravel\Cashier\Billable;
 
@@ -20,22 +25,22 @@ use Laravel\Cashier\Billable;
  * @property int $id
  * @property int $user_id
  * @property string $name
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  * @property string|null $stripe_id
  * @property string|null $pm_type
  * @property string|null $pm_last_four
  * @property string|null $trial_ends_at
- * @property-read \App\Models\Subscription|null $defaultSubscription
- * @property-read \App\Models\User $owner
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\TeamOwnershipInvitation> $ownershipInvitations
+ * @property-read Subscription|null $defaultSubscription
+ * @property-read User $owner
+ * @property-read Collection<int, TeamOwnershipInvitation> $ownershipInvitations
  * @property-read int|null $ownership_invitations_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Subscription> $subscriptions
+ * @property-read Collection<int, Subscription> $subscriptions
  * @property-read int|null $subscriptions_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\TeamInvitation> $teamInvitations
+ * @property-read Collection<int, TeamInvitation> $teamInvitations
  * @property-read int|null $team_invitations_count
- * @property-read \App\Models\TeamUser|null $pivot
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\User> $users
+ * @property-read TeamUser|null $pivot
+ * @property-read Collection<int, User> $users
  * @property-read int|null $users_count
  *
  * @method static \Database\Factories\TeamFactory factory($count = null, $state = [])
@@ -57,17 +62,16 @@ use Laravel\Cashier\Billable;
  * @mixin \Eloquent
  */
 #[ObservedBy([TeamObserver::class])]
+#[Fillable([
+    'name',
+])]
 class Team extends Model
 {
-    /** @use HasFactory<\Database\Factories\TeamFactory> */
+    /** @use HasFactory<TeamFactory> */
     use Billable, HasFactory, HasPlanFeatures;
 
-    protected $fillable = [
-        'name',
-    ];
-
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<User, $this>
+     * @return BelongsTo<User, $this>
      */
     public function owner(): BelongsTo
     {
@@ -75,7 +79,7 @@ class Team extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany<\App\Models\User, $this, \Illuminate\Database\Eloquent\Relations\Pivot>
+     * @return BelongsToMany<User, $this, Pivot>
      */
     public function users(): BelongsToMany
     {
@@ -87,7 +91,7 @@ class Team extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany<TeamInvitation, $this>
+     * @return HasMany<TeamInvitation, $this>
      */
     public function teamInvitations(): HasMany
     {
@@ -95,7 +99,7 @@ class Team extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany<TeamOwnershipInvitation, $this>
+     * @return HasMany<TeamOwnershipInvitation, $this>
      */
     public function ownershipInvitations(): HasMany
     {

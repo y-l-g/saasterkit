@@ -12,6 +12,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Session\Store as Session;
 use Laravel\Fortify\Events\TwoFactorAuthenticationChallenged;
 use Laravel\Socialite\Contracts\Factory as SocialiteFactory;
+use Laravel\Socialite\Two\AbstractProvider;
 use Laravel\Socialite\Two\User as SocialiteUser;
 
 final readonly class HandleProviderCallbackController
@@ -23,7 +24,7 @@ final readonly class HandleProviderCallbackController
 
     public function __invoke(SocialiteFactory $socialite, string $provider): RedirectResponse
     {
-        /** @var \Laravel\Socialite\Two\AbstractProvider $driver */
+        /** @var AbstractProvider $driver */
         $driver = $socialite->driver($provider);
         $socialiteUser = $driver->stateless()->user();
         assert($socialiteUser instanceof SocialiteUser);
@@ -78,9 +79,9 @@ final readonly class HandleProviderCallbackController
                 'login.id' => $user->getKey(),
                 'login.remember' => true,
             ]);
-            TwoFactorAuthenticationChallenged::dispatch($user);
+            event(new TwoFactorAuthenticationChallenged($user));
 
-            return redirect()->route('two-factor.login');
+            return to_route('two-factor.login');
         }
 
         return $this->loginAndRedirect($user);

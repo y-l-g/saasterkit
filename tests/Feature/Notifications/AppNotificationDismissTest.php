@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 use App\Models\AppNotification;
 use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
 
 use function Pest\Laravel\actingAs;
 
-uses(\Illuminate\Foundation\Testing\RefreshDatabase::class);
+uses(RefreshDatabase::class);
 
 it('allows a user to dismiss a notification', function (): void {
     $user = User::factory()->create();

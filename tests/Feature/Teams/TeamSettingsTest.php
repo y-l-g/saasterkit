@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 use App\Models\Team;
 use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 use function Pest\Laravel\actingAs;
 
-uses(\Illuminate\Foundation\Testing\RefreshDatabase::class);
+uses(RefreshDatabase::class);
 
 it('denies access if user is not part of the team', function (): void {
     $user = User::factory()->create();

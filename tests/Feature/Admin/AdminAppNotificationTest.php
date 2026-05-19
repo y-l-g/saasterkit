@@ -2,12 +2,14 @@
 
 declare(strict_types=1);
 
+use App\Models\AppNotification;
 use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 use function Pest\Laravel\actingAs;
 use function Pest\Laravel\assertDatabaseCount;
 
-uses(\Illuminate\Foundation\Testing\RefreshDatabase::class);
+uses(RefreshDatabase::class);
 
 beforeEach(function (): void {
     $this->admin = User::factory()->create(['is_admin' => true]);
@@ -37,7 +39,7 @@ it('allows an admin user to send a notification to all users', function (): void
         ->assertSessionHas('success', 'Notification sent to all users.');
 
     assertDatabaseCount('app_notifications', 1);
-    $notification = \App\Models\AppNotification::query()->first();
+    $notification = AppNotification::query()->first();
     assertDatabaseCount('app_notification_user', User::query()->count());
     expect($notification->title)->toBe('Test Title');
 });

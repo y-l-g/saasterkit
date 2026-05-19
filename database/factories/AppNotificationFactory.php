@@ -8,7 +8,7 @@ use App\Models\AppNotification;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\AppNotification>
+ * @extends Factory<AppNotification>
  */
 class AppNotificationFactory extends Factory
 {

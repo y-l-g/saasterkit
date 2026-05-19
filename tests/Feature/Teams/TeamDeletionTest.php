@@ -5,11 +5,12 @@ declare(strict_types=1);
 use App\Models\Subscription;
 use App\Models\Team;
 use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 use function Pest\Laravel\actingAs;
 use function Pest\Laravel\assertDatabaseMissing;
 
-uses(\Illuminate\Foundation\Testing\RefreshDatabase::class);
+uses(RefreshDatabase::class);
 
 it('denies access if user does not have team delete permission', function (): void {
     $owner = User::factory()->create();

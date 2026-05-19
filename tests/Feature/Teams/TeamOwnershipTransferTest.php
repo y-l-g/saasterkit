@@ -5,12 +5,13 @@ declare(strict_types=1);
 use App\Models\Team;
 use App\Models\User;
 use App\Notifications\TeamOwnershipTransferNotification;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\URL;
 
 use function Pest\Laravel\actingAs;
 
-uses(\Illuminate\Foundation\Testing\RefreshDatabase::class);
+uses(RefreshDatabase::class);
 
 it('allows the team owner to send an ownership transfer invitation', function (): void {
     Notification::fake();

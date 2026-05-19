@@ -1,12 +1,13 @@
 <?php
 
 declare(strict_types=1);
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 use function Pest\Laravel\assertAuthenticated;
 use function Pest\Laravel\get;
 use function Pest\Laravel\post;
 
-uses(\Illuminate\Foundation\Testing\RefreshDatabase::class);
+uses(RefreshDatabase::class);
 
 it('can render the registration screen', function (): void {
     get(route('register'))->assertOk();

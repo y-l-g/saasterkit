@@ -5,9 +5,10 @@ declare(strict_types=1);
 use App\Enums\Teams\RoleEnum;
 use App\Models\Team;
 use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Cache;
 
-uses(\Illuminate\Foundation\Testing\RefreshDatabase::class);
+uses(RefreshDatabase::class);
 
 test('it clears permissions cache when a user is added to a team', function (): void {
     $user = User::factory()->create();

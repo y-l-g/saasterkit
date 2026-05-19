@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 use App\Models\Team;
 use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Cache;
 
-uses(\Illuminate\Foundation\Testing\RefreshDatabase::class);
+uses(RefreshDatabase::class);
 
 test('it clears cache for old and new owner when team owner changes', function (): void {
     $oldOwner = User::factory()->create();
