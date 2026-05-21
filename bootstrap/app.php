@@ -26,7 +26,7 @@ return Application::configure(basePath: dirname(__DIR__))
             AddLinkHeadersForPreloadedAssets::class,
             EnsureUserTeamIsConsistent::class,
         ]);
-        $middleware->validateCsrfTokens(except: [
+        $middleware->preventRequestForgery(except: [
             'stripe/*',
         ]);
 
