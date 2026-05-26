@@ -14,6 +14,30 @@ class HandleInertiaRequests extends Middleware
 {
     protected $rootView = 'app';
 
+    /**
+     * Defines the routes that should not use SSR.
+     *
+     * @var array<int, string>
+     */
+    protected $withoutSsr = [
+        'admin',
+        'admin/*',
+        'auth/*/link',
+        'auth/*/unlink',
+        'billing/*',
+        'checkout/*',
+        'current-team',
+        'dashboard',
+        'onboarding',
+        'settings',
+        'settings/*',
+        'team-invitations',
+        'team-invitations/*',
+        'team-ownership-transfers/*',
+        'teams',
+        'teams/*',
+    ];
+
     public function version(Request $request): ?string
     {
         return parent::version($request);
