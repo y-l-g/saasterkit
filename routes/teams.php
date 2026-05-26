@@ -17,7 +17,7 @@ use App\Http\Controllers\Teams\TeamSwitchController;
 use App\Http\Controllers\Teams\TeamUpdateController;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware(['has.team', 'auth', 'verified'])->group(function (): void {
+Route::middleware(['has.team', 'auth', 'verified', 'nossr'])->group(function (): void {
 
     Route::post('teams', TeamStoreController::class)
         ->withoutMiddleware(['has.team'])

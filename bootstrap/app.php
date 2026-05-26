@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\DisableSsr;
 use App\Http\Middleware\EnsureUserHasPassword;
 use App\Http\Middleware\EnsureUserIsAdmin;
 use App\Http\Middleware\EnsureUserTeamIsConsistent;
@@ -41,6 +42,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'has.password' => EnsureUserHasPassword::class,
             'admin' => EnsureUserIsAdmin::class,
             'has.team' => RedirectIfNoTeam::class,
+            'nossr' => DisableSsr::class,
         ]);
 
     })

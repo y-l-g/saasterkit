@@ -12,7 +12,7 @@ Route::get('/', WelcomeController::class)->name('home');
 
 Route::get('privacy', PrivacyController::class)->name('privacy');
 
-Route::middleware(['auth', 'verified'])->group(function (): void {
+Route::middleware(['auth', 'verified', 'nossr'])->group(function (): void {
 
     Route::get('dashboard', AppDashboardShowController::class)->middleware(['has.team'])->name('dashboard');
 

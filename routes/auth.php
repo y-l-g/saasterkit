@@ -18,7 +18,7 @@ Route::middleware(['throttle:6,1'])->group(function (): void {
 
     });
 
-    Route::middleware(['auth', 'verified'])->group(function (): void {
+    Route::middleware(['auth', 'verified', 'nossr'])->group(function (): void {
 
         Route::get('auth/{provider}/link', RedirectToProviderController::class)->name('provider.link');
 

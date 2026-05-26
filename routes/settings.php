@@ -11,7 +11,7 @@ use App\Http\Controllers\Settings\UserTeamIndexShowController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-Route::middleware(['auth', 'verified'])->group(function (): void {
+Route::middleware(['auth', 'verified', 'nossr'])->group(function (): void {
 
     Route::redirect('settings', '/settings/profile')->name('user.settings');
 
