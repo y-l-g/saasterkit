@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import CardInfo from '@/components/common/CardInfo.vue';
+import PasswordInput from '@/components/PasswordInput.vue';
 import AuthBase from '@/layouts/AuthLayout.vue';
 import { register } from '@/routes';
 import { store } from '@/routes/login';
@@ -54,9 +55,8 @@ useHead({
                         Forgot password?
                     </ULink>
                 </template>
-                <UInput
+                <PasswordInput
                     id="password"
-                    type="password"
                     name="password"
                     required
                     :tabindex="2"

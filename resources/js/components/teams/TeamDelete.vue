@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import PasswordInput from '@/components/PasswordInput.vue';
 import { useAuthPage } from '@/composables/useAuthPage';
 import { portal } from '@/routes/billing';
 import { edit } from '@/routes/password';
@@ -11,7 +12,7 @@ interface Props {
 }
 
 const props = defineProps<Props>();
-const passwordInput = ref<HTMLInputElement | null>(null);
+const passwordInput = ref<InstanceType<typeof PasswordInput> | null>(null);
 const page = useAuthPage();
 const confirmingTeamDeletion = ref(false);
 const form = useForm({ password: '' });
@@ -23,7 +24,7 @@ const deleteTeam = (close: () => void) => {
             form.reset();
         },
         onError: () => {
-            passwordInput?.value?.focus();
+            passwordInput.value?.focus();
         },
     });
 };
@@ -90,10 +91,9 @@ const goToPortal = () => {
                         label="Password"
                         required
                     >
-                        <UInput
+                        <PasswordInput
                             required
                             id="password"
-                            type="password"
                             name="password"
                             ref="passwordInput"
                             v-model="form.password"

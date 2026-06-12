@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import PasswordInput from '@/components/PasswordInput.vue';
 import AuthLayout from '@/layouts/AuthLayout.vue';
 import { update } from '@/routes/password';
 import { Head, useForm } from '@inertiajs/vue3';
@@ -48,9 +49,8 @@ const submitReset = () => {
                 name="password"
                 :error="form.errors.password"
             >
-                <UInput
+                <PasswordInput
                     id="password"
-                    type="password"
                     name="password"
                     class="w-full"
                     autocomplete="new-password"
@@ -65,9 +65,8 @@ const submitReset = () => {
                 name="password_confirmation"
                 :error="form.errors.password_confirmation"
             >
-                <UInput
+                <PasswordInput
                     id="password_confirmation"
-                    type="password"
                     class="w-full"
                     name="password_confirmation"
                     v-model="form.password_confirmation"

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import PasswordInput from '@/components/PasswordInput.vue';
 import AuthLayout from '@/layouts/AuthLayout.vue';
 import { store } from '@/routes/password/confirm';
 import { Form } from '@inertiajs/vue3';
@@ -24,9 +25,8 @@ useHead({
                 name="password"
                 :error="errors.password"
             >
-                <UInput
+                <PasswordInput
                     id="password"
-                    type="password"
                     name="password"
                     class="mt-1 block w-full"
                     required

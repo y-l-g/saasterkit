@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import PasswordInput from '@/components/PasswordInput.vue';
 import { useAuthPage } from '@/composables/useAuthPage';
 import SettingsLayout from '@/layouts/SettingsLayout.vue';
 import { settings } from '@/routes/user';
@@ -50,10 +51,10 @@ useHead({
                     :error="errors.current_password"
                     required
                 >
-                    <UInput
+                    <PasswordInput
                         required
+                        id="current_password"
                         name="current_password"
-                        type="password"
                         autocomplete="current-password"
                         placeholder="Current password"
                         class="w-full"
@@ -66,10 +67,10 @@ useHead({
                     :error="errors.password"
                     required
                 >
-                    <UInput
+                    <PasswordInput
                         required
+                        id="password"
                         name="password"
-                        type="password"
                         autocomplete="new-password"
                         placeholder="New password"
                         class="w-full"
@@ -82,11 +83,10 @@ useHead({
                     :error="errors.password_confirmation"
                     required
                 >
-                    <UInput
+                    <PasswordInput
                         required
                         id="password_confirmation"
                         name="password_confirmation"
-                        type="password"
                         autocomplete="new-password"
                         placeholder="Confirm password"
                         class="w-full"

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import PasswordInput from '@/components/PasswordInput.vue';
 import { useAuthPage } from '@/composables/useAuthPage';
 import { edit } from '@/routes/password';
 import { destroy } from '@/routes/profile';
@@ -10,7 +11,7 @@ defineProps<{
     userOwnsTeam: boolean;
 }>();
 
-const passwordInput = ref<HTMLInputElement | null>(null);
+const passwordInput = ref<InstanceType<typeof PasswordInput> | null>(null);
 
 const form = useForm({
     password: '',
@@ -26,7 +27,7 @@ const deleteTeam = (close: () => void) => {
             form.reset();
         },
         onError: () => {
-            passwordInput?.value?.focus();
+            passwordInput.value?.focus();
         },
     });
 };
@@ -83,10 +84,9 @@ const deleteTeam = (close: () => void) => {
                         label="Password"
                         required
                     >
-                        <UInput
+                        <PasswordInput
                             required
                             id="password"
-                            type="password"
                             name="password"
                             ref="passwordInput"
                             v-model="form.password"

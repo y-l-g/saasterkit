@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import CardInfo from '@/components/common/CardInfo.vue';
+import PasswordInput from '@/components/PasswordInput.vue';
 import AuthBase from '@/layouts/AuthLayout.vue';
 import { login } from '@/routes';
 import { redirect } from '@/routes/provider';
@@ -58,9 +59,8 @@ useHead({
                 :error="errors.password"
                 required
             >
-                <UInput
+                <PasswordInput
                     id="password"
-                    type="password"
                     required
                     :tabindex="3"
                     autocomplete="new-password"
@@ -76,9 +76,8 @@ useHead({
                 :error="errors.password_confirmation"
                 required
             >
-                <UInput
+                <PasswordInput
                     id="password_confirmation"
-                    type="password"
                     required
                     :tabindex="4"
                     autocomplete="new-password"
