@@ -7,6 +7,7 @@ namespace App\Http\Controllers\Auth\Socialite;
 use App\Models\SocialAccount;
 use App\Models\User;
 use App\Notifications\LoginLinkNotification;
+use App\Support\EmailAddress;
 use Illuminate\Contracts\Auth\StatefulGuard;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Session\Store as Session;
@@ -41,13 +42,14 @@ final readonly class HandleProviderCallbackController
         /** @var User $user */
         $user = $this->guard->user();
 
-        if ($user->email === $socialiteUser->getEmail()) {
+        if (EmailAddress::matches($user->email, $socialiteUser->getEmail())) {
             $user->addSocialAccount($socialiteUser, $provider);
 
-            return $this->redirectAfterAccountLinking();
+            return $this->redirectAfterAccountLinking($user);
         }
 
-        return to_route('profile.edit')->with('error', 'The email address of this account does not match the one from the provider.');
+        return $this->redirectToProfile($user)
+            ->with('error', 'The email address of this account does not match the one from the provider.');
     }
 
     private function handleGuestUser(SocialiteUser $socialiteUser, string $provider): RedirectResponse
@@ -61,7 +63,9 @@ final readonly class HandleProviderCallbackController
             return $this->loginOrChallengeTwoFactor($socialAccount->user);
         }
 
-        $userWithSameEmail = User::query()->where('email', $socialiteUser->getEmail())->first();
+        $userWithSameEmail = User::query()
+            ->where('email', EmailAddress::normalize($socialiteUser->getEmail()))
+            ->first();
 
         if ($userWithSameEmail) {
             return $this->sendLoginLinkandRedirect($userWithSameEmail);
@@ -94,11 +98,11 @@ final readonly class HandleProviderCallbackController
         return redirect()->intended('/dashboard');
     }
 
-    private function redirectAfterAccountLinking(): RedirectResponse
+    private function redirectAfterAccountLinking(User $user): RedirectResponse
     {
         $this->session->regenerate();
 
-        return to_route('profile.edit')->with('success', 'Your provider account has been linked.');
+        return $this->redirectToProfile($user)->with('success', 'Your provider account has been linked.');
     }
 
     private function sendLoginLinkandRedirect(User $user): RedirectResponse
@@ -106,5 +110,14 @@ final readonly class HandleProviderCallbackController
         $user->notify(new LoginLinkNotification);
 
         return to_route('login')->with('info', 'An account with this email already exists. We have sent a login link to your email address.');
+    }
+
+    private function redirectToProfile(User $user): RedirectResponse
+    {
+        if (! $user->currentTeam) {
+            return to_route('onboarding');
+        }
+
+        return to_route('profile.edit', ['current_team' => $user->currentTeam->slug]);
     }
 }

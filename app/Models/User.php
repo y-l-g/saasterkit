@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Models\Concerns\HasTeams;
+use App\Support\EmailAddress;
 use Database\Factories\UserFactory;
 use Illuminate\Auth\MustVerifyEmail;
 use Illuminate\Contracts\Auth\MustVerifyEmail as MustVerifyEmailContract;
@@ -136,7 +137,7 @@ class User extends Authenticatable implements MustVerifyEmailContract
         return DB::transaction(function () use ($socialiteUser, $provider) {
             /** @var User $user */
             $user = self::query()->create([
-                'email' => $socialiteUser->getEmail(),
+                'email' => EmailAddress::normalize($socialiteUser->getEmail()) ?? '',
                 'name' => $socialiteUser->getName(),
             ]);
             $user->addSocialAccount($socialiteUser, $provider);

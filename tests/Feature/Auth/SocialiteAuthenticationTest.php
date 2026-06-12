@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Models\SocialAccount;
+use App\Models\Team;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Socialite\Facades\Socialite;
@@ -32,12 +33,47 @@ function mockSocialiteProvider(string $email = 'test@example.com', string $name 
 }
 
 it('can register and authenticate a new user via socialite', function (): void {
-    mockSocialiteProvider('test@example.com', 'Test User');
+    mockSocialiteProvider(' Test@Example.COM ', 'Test User');
 
     get(route('provider.callback', 'google'));
 
     assertDatabaseHas('users', ['email' => 'test@example.com']);
     assertAuthenticated();
+});
+
+it('can link an authenticated user when provider email casing differs', function (): void {
+    $user = User::factory()->create(['email' => 'test@example.com']);
+    $team = Team::factory()->create(['user_id' => $user->id]);
+    $user->switchToTeam($team);
+
+    mockSocialiteProvider(' Test@Example.COM ', 'Test User', '67890');
+
+    $this->actingAs($user)
+        ->get(route('provider.callback', 'google'))
+        ->assertRedirect(scoped_route('profile.edit', $team));
+
+    assertDatabaseHas('social_accounts', [
+        'user_id' => $user->id,
+        'provider' => 'google',
+        'provider_id' => '67890',
+    ]);
+});
+
+it('redirects to the current team profile after unlinking a provider', function (): void {
+    $user = User::factory()
+        ->has(SocialAccount::factory(['provider' => 'google']))
+        ->create();
+    $team = Team::factory()->create(['user_id' => $user->id]);
+    $user->switchToTeam($team);
+
+    $this->actingAs($user)
+        ->delete(route('provider.unlink', 'google'))
+        ->assertRedirect(scoped_route('profile.edit', $team));
+
+    $this->assertDatabaseMissing('social_accounts', [
+        'user_id' => $user->id,
+        'provider' => 'google',
+    ]);
 });
 
 it('can authenticate an existing user via socialite', function (): void {

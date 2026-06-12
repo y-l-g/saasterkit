@@ -20,6 +20,11 @@ final readonly class UnlinkProviderController
             ->firstOrFail()
             ->delete();
 
-        return to_route('profile.edit')->with('success', 'The social account has been unlinked successfully.');
+        if (! $user->currentTeam) {
+            return to_route('onboarding')->with('success', 'The social account has been unlinked successfully.');
+        }
+
+        return to_route('profile.edit', ['current_team' => $user->currentTeam->slug])
+            ->with('success', 'The social account has been unlinked successfully.');
     }
 }

@@ -15,7 +15,7 @@ it('prompts for login and links account if email already exists', function (): v
         'password' => 'password',
     ]);
 
-    mockSocialiteProvider('test@example.com', 'Test User From Google', '12345');
+    mockSocialiteProvider(' Test@Example.COM ', 'Test User From Google', '12345');
 
     $response = get(route('provider.callback', 'google'));
 
