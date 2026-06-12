@@ -9,7 +9,6 @@ use App\Data\Teams\TeamMemberData;
 use App\Enums\Teams\TeamMemberPermissionEnum;
 use App\Models\Team;
 use App\Services\RoleService;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -18,11 +17,11 @@ final readonly class TeamSettingsShowController
 {
     public function __construct(private RoleService $roleService) {}
 
-    public function __invoke(Request $request, Team $team): Response
+    public function __invoke(Team $current_team): Response
     {
-        Gate::authorize(TeamMemberPermissionEnum::TEAM_VIEW, $team);
+        $team = $current_team;
 
-        $request->user()->switchToTeam($team);
+        Gate::authorize(TeamMemberPermissionEnum::TEAM_VIEW, $team);
 
         $team->load('owner', 'teamInvitations', 'defaultSubscription');
 

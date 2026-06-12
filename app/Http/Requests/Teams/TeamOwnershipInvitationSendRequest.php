@@ -16,7 +16,7 @@ class TeamOwnershipInvitationSendRequest extends FormRequest
     public function authorize(): bool
     {
         /** @var Team $team */
-        $team = $this->route('team');
+        $team = $this->route('current_team');
 
         return Gate::allows(TeamMemberPermissionEnum::TEAM_OWNER_TRANSFER, $team);
     }
@@ -39,7 +39,7 @@ class TeamOwnershipInvitationSendRequest extends FormRequest
         return [
             function (Validator $validator): void {
                 /** @var Team $team */
-                $team = $this->route('team');
+                $team = $this->route('current_team');
                 $email = $this->input('email');
 
                 $newOwner = User::query()->where('email', $email)->first();

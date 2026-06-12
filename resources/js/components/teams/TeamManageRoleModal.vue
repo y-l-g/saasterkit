@@ -25,7 +25,7 @@ const manageRole = (teamMember: App.Data.Teams.TeamMemberData) => {
 const updateRole = (close: () => void) => {
     updateRoleForm.submit(
         update({
-            team: props.team.id,
+            current_team: props.team.slug,
             user: props.member,
         }),
         {

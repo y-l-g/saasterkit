@@ -16,7 +16,7 @@ const inviteTeamMemberForm = useForm({
 });
 
 const inviteTeamMember = () => {
-    inviteTeamMemberForm.submit(store(props.team.id), {
+    inviteTeamMemberForm.submit(store(props.team.slug), {
         preserveScroll: true,
         onSuccess: () => inviteTeamMemberForm.reset(),
     });

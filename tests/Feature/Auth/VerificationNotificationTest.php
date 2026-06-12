@@ -28,7 +28,7 @@ it('does not send a verification notification if email is already verified', fun
 
     actingAs($user)
         ->post(route('verification.send'))
-        ->assertRedirect(route('dashboard', absolute: false));
+        ->assertRedirect('/dashboard');
 
     Notification::assertNothingSent();
 });

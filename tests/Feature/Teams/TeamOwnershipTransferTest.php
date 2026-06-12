@@ -21,7 +21,7 @@ it('allows the team owner to send an ownership transfer invitation', function ()
     $team->users()->syncWithPivotValues($member->id, ['role' => 'admin'], false);
 
     actingAs($owner)
-        ->post(route('teams.ownership.invitations.send', $team), ['email' => $member->email])
+        ->post(scoped_route('teams.ownership.invitations.send', $team), ['email' => $member->email])
         ->assertSessionHas('success');
 
     Notification::assertSentTo(
@@ -45,7 +45,7 @@ it('allows the recipient to accept the ownership transfer', function (): void {
 
     actingAs($member)
         ->get($acceptUrl)
-        ->assertRedirect(route('dashboard'));
+        ->assertRedirect(scoped_route('dashboard', $team));
 
     $team->refresh();
     $owner->refresh();

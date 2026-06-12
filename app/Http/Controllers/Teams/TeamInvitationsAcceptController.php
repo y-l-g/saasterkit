@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Teams;
 
 use App\Http\Requests\Teams\TeamInvitationsAcceptRequest;
+use App\Models\Team;
 use App\Models\TeamInvitation;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
@@ -14,7 +15,6 @@ final readonly class TeamInvitationsAcceptController
 {
     public function __invoke(TeamInvitationsAcceptRequest $request): RedirectResponse
     {
-
         /** @var User $user */
         $user = $request->user();
         $invitations = TeamInvitation::with('team')
@@ -41,6 +41,11 @@ final readonly class TeamInvitationsAcceptController
             $user->switchToTeam($lastInvitedTeam);
         }
 
-        return to_route('dashboard')->with('success', 'Great! You have joined the team.');
+        $redirectTeam = $lastInvitedTeam ?? $user->currentTeam;
+
+        abort_unless($redirectTeam instanceof Team, 404);
+
+        return to_route('dashboard', ['current_team' => $redirectTeam->slug])
+            ->with('success', 'Great! You have joined the team.');
     }
 }

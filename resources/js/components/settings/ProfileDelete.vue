@@ -17,8 +17,9 @@ const form = useForm({
 });
 
 const page = useAuthPage();
+const currentTeamSlug = page.props.user.currentTeam!.slug;
 const deleteTeam = (close: () => void) => {
-    form.submit(destroy(), {
+    form.submit(destroy(currentTeamSlug), {
         preserveScroll: true,
         onSuccess: () => {
             close();
@@ -48,11 +49,13 @@ const deleteTeam = (close: () => void) => {
         >
         <template #description v-else-if="!page.props.user.hasPassword"
             >To delete your account, you must
-            <ULink class="underline" :to="edit().url">define a password</ULink>
+            <ULink class="underline" :to="edit(currentTeamSlug).url"
+                >define a password</ULink
+            >
         </template>
         <template #description v-else-if="userOwnsTeam"
             >To delete your account, you must
-            <ULink class="underline" :to="teams().url"
+            <ULink class="underline" :to="teams(currentTeamSlug).url"
                 >delete all the teams you own</ULink
             >
         </template>

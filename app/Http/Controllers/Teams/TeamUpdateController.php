@@ -10,9 +10,9 @@ use Illuminate\Http\RedirectResponse;
 
 final readonly class TeamUpdateController
 {
-    public function __invoke(TeamUpdateRequest $request, Team $team): RedirectResponse
+    public function __invoke(TeamUpdateRequest $request, Team $current_team): RedirectResponse
     {
-        $team->forceFill([
+        $current_team->forceFill([
             'name' => $request->input('name'),
         ])->save();
 

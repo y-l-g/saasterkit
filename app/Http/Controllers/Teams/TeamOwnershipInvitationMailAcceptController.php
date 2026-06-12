@@ -47,6 +47,7 @@ final class TeamOwnershipInvitationMailAcceptController
             body: "You are no more owner of the team {$team->name}. The new owner is {$user->email}."
         );
 
-        return to_route('dashboard')->with('success', "You are now the owner of the {$team->name} team.");
+        return to_route('dashboard', ['current_team' => $team->slug])
+            ->with('success', "You are now the owner of the {$team->name} team.");
     }
 }

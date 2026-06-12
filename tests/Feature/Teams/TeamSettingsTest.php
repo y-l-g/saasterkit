@@ -17,7 +17,7 @@ it('denies access if user is not part of the team', function (): void {
 
     $other_team = Team::factory()->create();
 
-    actingAs($user)->get(route('teams.settings.show', $other_team))->assertForbidden();
+    actingAs($user)->get(scoped_route('teams.settings.show', $other_team))->assertForbidden();
 });
 
 it('renders the team settings page', function (): void {
@@ -25,5 +25,5 @@ it('renders the team settings page', function (): void {
     $team = Team::factory()->create(['user_id' => $user->id]);
     $user->teams()->sync($team->id, false);
 
-    actingAs($user)->get(route('teams.settings.show', $team))->assertOk();
+    actingAs($user)->get(scoped_route('teams.settings.show', $team))->assertOk();
 });

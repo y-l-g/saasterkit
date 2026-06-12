@@ -14,7 +14,7 @@ const form = useForm({
 });
 
 const transferTeamOwnership = () => {
-    form.submit(send({ team: props.team.id }), {
+    form.submit(send(props.team.slug), {
         onSuccess: () => {
             form.reset();
         },

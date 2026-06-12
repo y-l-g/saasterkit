@@ -29,6 +29,6 @@ final readonly class TeamStoreController
 
         $user->switchToTeam($team);
 
-        return to_route('billing.show', $team);
+        return to_route('billing.show', ['current_team' => $team->slug]);
     }
 }

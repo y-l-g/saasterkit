@@ -22,7 +22,7 @@ const items = computed<DropdownMenuItem[][]>(() => [
         {
             label: 'Settings',
             icon: 'i-lucide-settings',
-            to: settings().url,
+            to: settings(page.props.user.currentTeam!.slug).url,
         },
     ],
     [

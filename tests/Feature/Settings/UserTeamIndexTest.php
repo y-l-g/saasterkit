@@ -13,7 +13,9 @@ uses(RefreshDatabase::class);
 
 it('renders the users teams page', function (): void {
     $user = User::factory()->create();
-    actingAs($user)->get(route('user.teams'))->assertOk();
+    $team = Team::factory()->create(['user_id' => $user->id]);
+
+    actingAs($user)->get(scoped_route('user.teams', $team))->assertOk();
 });
 
 it('displays a list of teams the user belongs to', function (): void {
@@ -22,7 +24,7 @@ it('displays a list of teams the user belongs to', function (): void {
     $user->save();
 
     actingAs($user)
-        ->get(route('user.teams'))
+        ->get(scoped_route('user.teams', $user->teams->first()))
         ->assertInertia(
             fn (Assert $page) => $page
                 ->component('settings/UserTeamIndex')

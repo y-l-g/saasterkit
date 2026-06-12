@@ -14,7 +14,7 @@ const removeTeamMemberForm = useForm({});
 const removeTeamMember = (close: () => void) => {
     removeTeamMemberForm.submit(
         destroy({
-            team: props.team.id,
+            current_team: props.team.slug,
             user: props.member,
         }),
         {

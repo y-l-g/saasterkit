@@ -38,11 +38,11 @@ const dropdownItems = computed<DropdownMenuItem[][]>(() => {
     const teamManagementSection: DropdownMenuItem[] = [
         {
             label: 'Team Settings',
-            to: show({ team: page.props.user.currentTeam!.id }).url,
+            to: show(page.props.user.currentTeam!.slug).url,
         },
         {
             label: 'Create New Team',
-            to: teams().url,
+            to: teams(page.props.user.currentTeam!.slug).url,
         },
     ];
 

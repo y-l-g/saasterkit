@@ -19,7 +19,7 @@ defineProps<{
                 :key="team.id"
                 :variant="team.isCurrentTeam ? 'soft' : 'ghost'"
                 class="cursor-pointer"
-                @click="router.get(show(team).url)"
+                @click="router.get(show(team.slug).url)"
                 highlight-color="neutral"
                 :ui="{ body: 'w-full' }"
             >

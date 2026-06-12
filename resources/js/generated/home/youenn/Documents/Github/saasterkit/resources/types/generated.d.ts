@@ -78,6 +78,7 @@ declare namespace App {
                 readonly userId: number;
                 readonly createdAt: string;
                 readonly name: string;
+                readonly slug: string;
                 readonly owner?: App.Data.Teams.TeamMemberData;
                 readonly invitations?: App.Data.Teams.TeamInvitationData[];
                 readonly subscription?: App.Data.Billing.SubscriptionData | null;
@@ -103,6 +104,7 @@ declare namespace App {
             export type UserTeamIndexData = {
                 readonly id: number;
                 readonly name: string;
+                readonly slug: string;
                 readonly isOwner: boolean;
                 readonly isCurrentTeam: boolean;
             };

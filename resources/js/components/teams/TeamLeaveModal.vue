@@ -16,7 +16,7 @@ const leaveTeamForm = useForm({
 
 const leaveTeam = (close: () => void) => {
     leaveTeamForm.submit(
-        destroy({ team: props.team.id, user: page.props.user }),
+        destroy({ current_team: props.team.slug, user: page.props.user }),
         {
             onSuccess: () => {
                 close();

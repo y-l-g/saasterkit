@@ -18,8 +18,10 @@ final readonly class TeamInvitationSendController
         private AppNotificationService $notificationService
     ) {}
 
-    public function __invoke(TeamInvitationSendRequest $request, Team $team): RedirectResponse
+    public function __invoke(TeamInvitationSendRequest $request, Team $current_team): RedirectResponse
     {
+        $team = $current_team;
+
         $invitation = $team->teamInvitations()->create([
             'email' => $request->input('email'),
             'role' => $request->input('role'),

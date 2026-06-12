@@ -7,7 +7,7 @@ import { useDashboard } from '@/composables/useDashboard';
 import { AppLogoIcon } from '@/icons/AppLogoIcon';
 import { admin, dashboard } from '@/routes';
 import type { BreadcrumbItem, NavigationMenuItem } from '@nuxt/ui';
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 
 defineProps<{
     breadcrumbs?: BreadcrumbItem[];
@@ -18,17 +18,23 @@ const { isNotificationsSlideoverOpen } = useDashboard();
 const open = ref(false);
 const page = useAuthPage();
 
-const hasCurrentTeamlinks: NavigationMenuItem[] = [
+const dashboardUrl = computed(() =>
+    page.props.user.currentTeam
+        ? dashboard(page.props.user.currentTeam.slug).url
+        : '/dashboard',
+);
+
+const hasCurrentTeamlinks = computed<NavigationMenuItem[]>(() => [
     {
         label: 'Dashboard',
         icon: 'i-lucide-house',
-        to: dashboard().url,
-        active: page.url === dashboard().url,
+        to: dashboardUrl.value,
+        active: page.url === dashboardUrl.value,
         onSelect: () => {
             open.value = false;
         },
     },
-];
+]);
 
 const bottomlinks: NavigationMenuItem[] = [
     {
@@ -65,7 +71,7 @@ const bottomlinks: NavigationMenuItem[] = [
                     :square="collapsed"
                     class="data-[state=open]:bg-elevated"
                     :class="[!collapsed && 'py-2']"
-                    :to="dashboard().url"
+                    :to="dashboardUrl"
                     ><span v-if="!collapsed"
                         ><span class="text-default">Saas</span>terkit</span
                     ></UButton
@@ -76,7 +82,7 @@ const bottomlinks: NavigationMenuItem[] = [
                 <UNavigationMenu
                     :collapsed="collapsed"
                     :items="
-                        page.props.user.currentTeamId ? hasCurrentTeamlinks : []
+                        page.props.user.currentTeam ? hasCurrentTeamlinks : []
                     "
                     orientation="vertical"
                     tooltip
@@ -94,7 +100,7 @@ const bottomlinks: NavigationMenuItem[] = [
 
             <template
                 #footer="{ collapsed }"
-                v-if="page.props.user.currentTeamId"
+                v-if="page.props.user.currentTeam"
             >
                 <TeamMenu :collapsed="collapsed" />
             </template>

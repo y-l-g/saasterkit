@@ -26,7 +26,7 @@ const { hasTeamPermission } = useTeamPermissions();
 
 function onPageChange(page: number) {
     router.get(
-        show(props.team.id, {
+        show(props.team.slug, {
             query: {
                 page,
             },

@@ -16,7 +16,7 @@ class TeamMemberDestroyRequest extends FormRequest
     public function authorize(): bool
     {
         /** @var Team $team */
-        $team = $this->route('team');
+        $team = $this->route('current_team');
         /** @var User $member */
         $member = $this->route('user');
 
@@ -42,7 +42,7 @@ class TeamMemberDestroyRequest extends FormRequest
     protected function passedValidation(): void
     {
         /** @var Team $team */
-        $team = $this->route('team');
+        $team = $this->route('current_team');
         /** @var User $member */
         $member = $this->route('user');
 

@@ -1,12 +1,18 @@
 <script setup lang="ts">
 import AppearanceColorPicker from '@/components/settings/AppearanceColorPicker.vue';
+import { useAuthPage } from '@/composables/useAuthPage';
 import SettingsLayout from '@/layouts/SettingsLayout.vue';
 import { update } from '@/routes/appearance';
 import { settings } from '@/routes/user';
 import { useForm } from '@inertiajs/vue3';
 import { useColorMode } from '@vueuse/core';
+import { computed } from 'vue';
+
+const page = useAuthPage();
+const currentTeamSlug = computed(() => page.props.user.currentTeam!.slug);
+
 const breadcrumbs = [
-    { label: 'Settings', to: settings().url },
+    { label: 'Settings', to: settings(currentTeamSlug.value).url },
     { label: 'Appearance' },
 ];
 
@@ -60,7 +66,7 @@ const submit = () => {
     form.primary_color = appConfig.ui.colors.primary;
     form.secondary_color = appConfig.ui.colors.secondary;
     form.neutral_color = appConfig.ui.colors.neutral;
-    form.submit(update(), {
+    form.submit(update(currentTeamSlug.value), {
         onError: () => {
             toast.add({
                 title: 'An error occurred',

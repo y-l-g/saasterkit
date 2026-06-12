@@ -44,7 +44,7 @@ it('updates the team slug when the team name changes', function (): void {
 it('uses the team slug for route model binding URLs', function (): void {
     $team = Team::factory()->create(['name' => 'Slugged Team']);
 
-    expect(route('teams.settings.show', $team, absolute: false))->toBe('/teams/slugged-team');
+    expect(scoped_route('teams.settings.show', $team, absolute: false))->toBe('/slugged-team/settings/team');
 });
 
 it('validates that the team name is required', function (): void {
@@ -62,5 +62,5 @@ it('redirects the user to the new teams billing page after creation', function (
         ->post(route('teams.store'), ['name' => 'My New Team']);
 
     $team = $user->fresh()->ownedTeams->first();
-    $response->assertRedirect(route('billing.show', $team));
+    $response->assertRedirect(scoped_route('billing.show', $team));
 });

@@ -13,8 +13,10 @@ use Illuminate\Support\Str;
 
 final class TeamOwnershipInvitationSendController
 {
-    public function __invoke(TeamOwnershipInvitationSendRequest $request, Team $team): RedirectResponse
+    public function __invoke(TeamOwnershipInvitationSendRequest $request, Team $current_team): RedirectResponse
     {
+        $team = $current_team;
+
         $newOwner = User::query()->where('email', $request->input('email'))->firstOrFail();
 
         $team->ownershipInvitations()->delete();

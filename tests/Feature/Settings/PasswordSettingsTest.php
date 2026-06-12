@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Models\Team;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
@@ -12,7 +13,9 @@ uses(RefreshDatabase::class);
 
 it('renders the password settings page', function (): void {
     $user = User::factory()->create();
-    actingAs($user)->get(route('password.edit'))->assertOk();
+    $team = Team::factory()->create(['user_id' => $user->id]);
+
+    actingAs($user)->get(scoped_route('password.edit', $team))->assertOk();
 });
 
 it('allows a user to update their password', function (): void {

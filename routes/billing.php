@@ -7,12 +7,10 @@ use App\Http\Controllers\Billing\RedirectToBillingPortalController;
 use App\Http\Controllers\Billing\ShowBillingSettingsController;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware(['auth', 'verified', 'has.team', 'team.member', 'nossr'])->group(function (): void {
+Route::get('settings/billing', ShowBillingSettingsController::class)->name('billing.show');
 
-    Route::get('billing/{team}', ShowBillingSettingsController::class)->name('billing.show');
+Route::get('settings/billing/checkout/{stripePriceId}', CreateStripeCheckoutController::class)
+    ->name('billing.checkout');
 
-    Route::get('checkout/{stripePriceId}/{team}', CreateStripeCheckoutController::class)->name('billing.checkout');
-
-    Route::get('billing/portal/{team}', RedirectToBillingPortalController::class)
-        ->name('billing.portal');
-});
+Route::get('settings/billing/portal', RedirectToBillingPortalController::class)
+    ->name('billing.portal');

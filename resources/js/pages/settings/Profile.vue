@@ -2,6 +2,7 @@
 import DeleteUser from '@/components/settings/ProfileDelete.vue';
 import ProfileInfo from '@/components/settings/ProfileInfo.vue';
 import ProfileSocialAccounts from '@/components/settings/ProfileSocialAccounts.vue';
+import { useAuthPage } from '@/composables/useAuthPage';
 import SettingsLayout from '@/layouts/SettingsLayout.vue';
 import { settings } from '@/routes/user';
 
@@ -11,8 +12,11 @@ defineProps<{
     userOwnsTeam: boolean;
 }>();
 
+const page = useAuthPage();
+const currentTeamSlug = page.props.user.currentTeam!.slug;
+
 const breadcrumbs = [
-    { label: 'Settings', to: settings().url },
+    { label: 'Settings', to: settings(currentTeamSlug).url },
     { label: 'Profile' },
 ];
 useHead({

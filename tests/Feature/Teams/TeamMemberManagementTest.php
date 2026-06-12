@@ -19,7 +19,7 @@ beforeEach(function (): void {
 
 it('allows an authorized user to update a team members role', function (): void {
     actingAs($this->owner)
-        ->put(route('teams.members.update', [$this->team, $this->member]), ['role' => 'admin'])
+        ->put(scoped_route('teams.members.update', $this->team, ['user' => $this->member]), ['role' => 'admin'])
         ->assertSessionHas('success');
 
     expect($this->member->teamRole($this->team)->value)->toBe('admin');
@@ -27,7 +27,7 @@ it('allows an authorized user to update a team members role', function (): void 
 
 it('allows an authorized user to remove a team member', function (): void {
     actingAs($this->owner)
-        ->delete(route('teams.members.destroy', [$this->team, $this->member]))
+        ->delete(scoped_route('teams.members.destroy', $this->team, ['user' => $this->member]))
         ->assertSessionHas('success');
 
     expect($this->team->fresh()->hasUser($this->member))->toBeFalse();
@@ -35,7 +35,7 @@ it('allows an authorized user to remove a team member', function (): void {
 
 it('allows a team member to leave a team', function (): void {
     actingAs($this->member)
-        ->delete(route('teams.members.destroy', [$this->team, $this->member]))
+        ->delete(scoped_route('teams.members.destroy', $this->team, ['user' => $this->member]))
         ->assertSessionHas('success');
 
     expect($this->team->fresh()->hasUser($this->member))->toBeFalse();
@@ -43,6 +43,6 @@ it('allows a team member to leave a team', function (): void {
 
 it('prevents the team owner from being removed or leaving the team', function (): void {
     actingAs($this->owner)
-        ->delete(route('teams.members.destroy', [$this->team, $this->owner]))
+        ->delete(scoped_route('teams.members.destroy', $this->team, ['user' => $this->owner]))
         ->assertSessionHasErrors();
 });

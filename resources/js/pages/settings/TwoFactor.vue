@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import TwoFactorRecoveryCodes from '@/components/settings/TwoFactorRecoveryCodes.vue';
 import TwoFactorSetupModal from '@/components/settings/TwoFactorSetupModal.vue';
+import { useAuthPage } from '@/composables/useAuthPage';
 import { useTwoFactorAuth } from '@/composables/useTwoFactorAuth';
 import SettingsLayout from '@/layouts/SettingsLayout.vue';
 import { disable, enable } from '@/routes/two-factor';
@@ -20,13 +21,15 @@ withDefaults(defineProps<Props>(), {
 
 const { hasSetupData, clearTwoFactorAuthData } = useTwoFactorAuth();
 const showSetupModal = ref<boolean>(false);
+const page = useAuthPage();
+const currentTeamSlug = page.props.user.currentTeam!.slug;
 
 onUnmounted(() => {
     clearTwoFactorAuthData();
 });
 
 const breadcrumbs = [
-    { label: 'Settings', to: settings().url },
+    { label: 'Settings', to: settings(currentTeamSlug).url },
     { label: 'Two-Factor Auth' },
 ];
 useHead({

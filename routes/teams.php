@@ -2,19 +2,14 @@
 
 declare(strict_types=1);
 
-use App\Http\Controllers\Teams\TeamDestroyController;
 use App\Http\Controllers\Teams\TeamInvitationDestroyController;
 use App\Http\Controllers\Teams\TeamInvitationMailAcceptController;
 use App\Http\Controllers\Teams\TeamInvitationsAcceptController;
-use App\Http\Controllers\Teams\TeamInvitationSendController;
-use App\Http\Controllers\Teams\TeamMemberDestroyController;
-use App\Http\Controllers\Teams\TeamMemberRoleUpdateController;
 use App\Http\Controllers\Teams\TeamOwnershipInvitationMailAcceptController;
-use App\Http\Controllers\Teams\TeamOwnershipInvitationSendController;
-use App\Http\Controllers\Teams\TeamSettingsShowController;
 use App\Http\Controllers\Teams\TeamStoreController;
 use App\Http\Controllers\Teams\TeamSwitchController;
-use App\Http\Controllers\Teams\TeamUpdateController;
+use App\Models\Team;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth', 'verified', 'nossr'])->group(function (): void {
@@ -41,27 +36,7 @@ Route::middleware(['auth', 'verified', 'nossr'])->group(function (): void {
             ->name('teams.invitations.destroy');
     });
 
-    Route::middleware(['has.team', 'team.member'])->group(function (): void {
-        Route::get('teams/{team}', TeamSettingsShowController::class)
-            ->name('teams.settings.show');
-
-        Route::put('teams/{team}', TeamUpdateController::class)
-            ->name('teams.update');
-
-        Route::delete('teams/{team}', TeamDestroyController::class)
-            ->middleware(['has.password'])
-            ->name('teams.destroy');
-
-        Route::post('teams/{team}/members', TeamInvitationSendController::class)
-            ->name('teams.members.store');
-
-        Route::put('teams/{team}/members/{user}', TeamMemberRoleUpdateController::class)
-            ->name('teams.members.update');
-
-        Route::delete('teams/{team}/members/{user}', TeamMemberDestroyController::class)
-            ->name('teams.members.destroy');
-
-        Route::post('/teams/{team}/transfer-ownership', TeamOwnershipInvitationSendController::class)
-            ->name('teams.ownership.invitations.send');
-    });
+    Route::get('teams/{team:slug}', fn (Team $team): RedirectResponse => to_route('teams.settings.show', [
+        'current_team' => $team->slug,
+    ]))->middleware(['has.team', 'team.member']);
 });

@@ -17,7 +17,7 @@ class TeamInvitationSendRequest extends FormRequest
     public function authorize(): bool
     {
         /** @var Team $team */
-        $team = $this->route('team');
+        $team = $this->route('current_team');
 
         return Gate::allows(TeamMemberPermissionEnum::TEAM_MEMBER_INVITE, $team);
     }
@@ -28,7 +28,7 @@ class TeamInvitationSendRequest extends FormRequest
     public function rules(): array
     {
         /** @var Team $team */
-        $team = $this->route('team');
+        $team = $this->route('current_team');
 
         return [
             'email' => [
@@ -58,7 +58,7 @@ class TeamInvitationSendRequest extends FormRequest
         return [
             function (Validator $validator): void {
                 /** @var Team $team */
-                $team = $this->route('team');
+                $team = $this->route('current_team');
                 $email = $this->input('email');
 
                 if (is_string($email) && $team->hasUserWithEmail($email)) {

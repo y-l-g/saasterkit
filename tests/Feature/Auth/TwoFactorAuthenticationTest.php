@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Models\Team;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Inertia\Testing\AssertableInertia as Assert;
@@ -22,10 +23,11 @@ it('can render the two factor settings page', function (): void {
     ]);
 
     $user = User::factory()->create();
+    $team = Team::factory()->create(['user_id' => $user->id]);
 
     actingAs($user)
         ->withSession(['auth.password_confirmed_at' => time()])
-        ->get(route('two-factor.show'))
+        ->get(scoped_route('two-factor.show', $team))
         ->assertInertia(
             fn (Assert $page): Assert => $page
                 ->component('settings/TwoFactor')
@@ -39,6 +41,7 @@ it('requires password confirmation for two factor settings page when enabled', f
     }
 
     $user = User::factory()->create();
+    $team = Team::factory()->create(['user_id' => $user->id]);
 
     Features::twoFactorAuthentication([
         'confirm' => true,
@@ -46,6 +49,6 @@ it('requires password confirmation for two factor settings page when enabled', f
     ]);
 
     actingAs($user)
-        ->get(route('two-factor.show'))
+        ->get(scoped_route('two-factor.show', $team))
         ->assertRedirect(route('password.confirm'));
 });

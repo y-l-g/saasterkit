@@ -3,11 +3,17 @@ import { dashboard, login, logout, privacy, register } from '@/routes';
 import { router, usePage } from '@inertiajs/vue3';
 import { DrawerProps, NavigationMenuItem } from '@nuxt/ui';
 import { useBreakpoints } from '@vueuse/core';
+import { computed } from 'vue';
 import IBiTwitterX from '~icons/bi/twitter-x';
 import ILucideDollarSign from '~icons/lucide/dollar-sign';
 import ILucideGithub from '~icons/lucide/github';
 
 const page = usePage();
+const dashboardUrl = computed(() =>
+    page.props.user?.currentTeam
+        ? dashboard(page.props.user.currentTeam.slug).url
+        : '/dashboard',
+);
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 const appUrl = import.meta.env.VITE_APP_URL;
@@ -92,7 +98,7 @@ const footerItems: NavigationMenuItem[] = [
             <template v-else>
                 <UButton
                     label="Dashboard"
-                    :to="dashboard().url"
+                    :to="dashboardUrl"
                     variant="link"
                     color="neutral"
                 />

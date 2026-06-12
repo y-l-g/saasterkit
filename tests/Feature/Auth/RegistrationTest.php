@@ -1,6 +1,7 @@
 <?php
 
 declare(strict_types=1);
+
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 use function Pest\Laravel\assertAuthenticated;
@@ -22,5 +23,5 @@ it('allows new users to register', function (): void {
     ]);
 
     assertAuthenticated();
-    $response->assertRedirect(route('dashboard', absolute: false));
+    $response->assertRedirect('/dashboard');
 });

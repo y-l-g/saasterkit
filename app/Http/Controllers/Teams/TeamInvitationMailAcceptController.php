@@ -29,6 +29,7 @@ final readonly class TeamInvitationMailAcceptController
             $invitation->delete();
         });
 
-        return to_route('dashboard')->with('success', "Great! You have joined the {$invitation->team->name} team.");
+        return to_route('dashboard', ['current_team' => $invitation->team->slug])
+            ->with('success', "Great! You have joined the {$invitation->team->name} team.");
     }
 }

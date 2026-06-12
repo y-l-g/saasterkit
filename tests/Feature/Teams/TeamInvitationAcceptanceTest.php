@@ -22,7 +22,7 @@ it('allows a logged in user to accept an invitation via a signed url', function 
 
     actingAs($user)
         ->get($acceptUrl)
-        ->assertRedirect(route('dashboard'));
+        ->assertRedirect(scoped_route('dashboard', $team));
 
     expect($user->belongsToTeam($team))->toBeTrue();
     assertDatabaseMissing('team_invitations', ['id' => $invitation->id]);

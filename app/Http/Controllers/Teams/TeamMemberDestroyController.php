@@ -11,15 +11,24 @@ use Illuminate\Http\RedirectResponse;
 
 final readonly class TeamMemberDestroyController
 {
-    public function __invoke(TeamMemberDestroyRequest $request, Team $team, User $user): RedirectResponse
+    public function __invoke(TeamMemberDestroyRequest $request, Team $current_team, User $user): RedirectResponse
     {
-        $team->removeUser($user);
+        $current_team->removeUser($user);
 
         /** @var User $currentUser */
         $currentUser = $request->user();
 
         if ($currentUser->is($user)) {
-            return to_route('dashboard')->with('success', 'You have left the team.');
+            $fallbackTeam = $currentUser->teams()->first();
+
+            if ($fallbackTeam) {
+                $currentUser->switchToTeam($fallbackTeam);
+
+                return to_route('dashboard', ['current_team' => $fallbackTeam->slug])
+                    ->with('success', 'You have left the team.');
+            }
+
+            return to_route('onboarding')->with('success', 'You have left the team.');
         }
 
         return back()->with('success', 'Team member has been removed.');

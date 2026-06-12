@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { BreadcrumbItem, NavigationMenuItem } from '@nuxt/ui';
+import { BreadcrumbItem } from '@nuxt/ui';
 
 import Container from '@/components/common/Container.vue';
 import { edit as EditAppearance } from '@/routes/appearance';
@@ -7,7 +7,7 @@ import { edit as EditPassword } from '@/routes/password';
 import { edit as EditProfile } from '@/routes/profile';
 import { show as ShowTwoFactors } from '@/routes/two-factor';
 import { teams } from '@/routes/user';
-import { usePage } from '@inertiajs/vue3';
+import { useAuthPage } from '@/composables/useAuthPage';
 import { breakpointsTailwind, useBreakpoints } from '@vueuse/core';
 import { computed } from 'vue';
 import AppLayout from './AppLayout.vue';
@@ -21,41 +21,43 @@ const isMobile = breakpoints.smallerOrEqual('sm');
 const orientation = computed(() => {
     return isMobile.value ? 'vertical' : 'horizontal';
 });
+const page = useAuthPage();
+const currentTeamSlug = computed(() => page.props.user.currentTeam!.slug);
 
-const links = [
+const links = computed(() => [
     [
         {
             label: 'Profile',
             icon: 'i-lucide-user',
-            to: EditProfile().url,
+            to: EditProfile(currentTeamSlug.value).url,
             exact: true,
         },
         {
             label: 'Password',
             icon: 'i-lucide-lock',
-            to: EditPassword().url,
+            to: EditPassword(currentTeamSlug.value).url,
         },
         {
             label: 'Two-Factor Auth',
             icon: 'i-lucide-shield-check',
-            to: ShowTwoFactors().url,
+            to: ShowTwoFactors(currentTeamSlug.value).url,
         },
         {
             label: 'Appearance',
             icon: 'i-lucide-palette',
-            to: EditAppearance().url,
+            to: EditAppearance(currentTeamSlug.value).url,
         },
         {
             label: 'Teams',
             icon: 'i-lucide-users',
-            to: teams().url,
+            to: teams(currentTeamSlug.value).url,
         },
     ],
-] satisfies NavigationMenuItem[][];
+]);
 
 const activeLabel = computed(() => {
-    const allLinks = links.flat();
-    const activeLink = allLinks.find((link) => link.to === usePage().url);
+    const allLinks = links.value.flat();
+    const activeLink = allLinks.find((link) => link.to === page.url);
     return activeLink?.label || 'Settings';
 });
 </script>

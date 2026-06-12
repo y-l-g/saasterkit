@@ -17,7 +17,7 @@ it('denies access if user does not have team update permission', function (): vo
     $team->users()->sync($member->id, ['role' => 'editor'], false);
 
     actingAs($member)
-        ->put(route('teams.update', $team), ['name' => 'New Team Name'])
+        ->put(scoped_route('teams.update', $team), ['name' => 'New Team Name'])
         ->assertForbidden();
 });
 
@@ -27,7 +27,7 @@ it('denies route team access before admin gate bypasses permissions', function (
     $team = Team::factory()->create();
 
     actingAs($admin)
-        ->put(route('teams.update', $team), ['name' => 'New Team Name'])
+        ->put(scoped_route('teams.update', $team), ['name' => 'New Team Name'])
         ->assertForbidden();
 });
 
@@ -39,7 +39,7 @@ it('switches the current team to the route-bound team', function (): void {
     $user->switchToTeam($currentTeam);
 
     actingAs($user)
-        ->put(route('teams.update', $routeTeam), ['name' => 'Route Team Name'])
+        ->put(scoped_route('teams.update', $routeTeam), ['name' => 'Route Team Name'])
         ->assertRedirect()
         ->assertSessionHas('success');
 
@@ -51,7 +51,7 @@ it('allows an authorized user to update the teams name', function (): void {
     $team = Team::factory()->create(['user_id' => $user->id]);
 
     actingAs($user)
-        ->put(route('teams.update', $team), ['name' => 'New Team Name'])
+        ->put(scoped_route('teams.update', $team), ['name' => 'New Team Name'])
         ->assertRedirect()
         ->assertSessionHas('success');
 
@@ -63,6 +63,6 @@ it('fails validation if the name is empty', function (): void {
     $team = Team::factory()->create(['user_id' => $user->id]);
 
     actingAs($user)
-        ->put(route('teams.update', $team), ['name' => ''])
+        ->put(scoped_route('teams.update', $team), ['name' => ''])
         ->assertSessionHasErrors('name');
 });

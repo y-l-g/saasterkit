@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Team;
 use Tests\TestCase;
 
 /*
@@ -44,4 +45,12 @@ expect()->extend('toBeOne', function () {
 function something(): void
 {
     // ..
+}
+
+function scoped_route(string $name, Team $team, array $parameters = [], bool $absolute = true): string
+{
+    return route($name, [
+        'current_team' => $team->slug,
+        ...$parameters,
+    ], $absolute);
 }

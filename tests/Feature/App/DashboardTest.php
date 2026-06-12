@@ -12,14 +12,14 @@ use function Pest\Laravel\get;
 uses(RefreshDatabase::class);
 
 it('redirects unauthenticated users to the login page', function (): void {
-    get(route('dashboard'))->assertRedirect(route('login'));
+    get('/dashboard')->assertRedirect(route('login'));
 });
 
 it('redirects authenticated users without a team to the onboarding page', function (): void {
     $user = User::factory()->create(['current_team_id' => null]);
 
     actingAs($user)
-        ->get(route('dashboard'))
+        ->get('/dashboard')
         ->assertRedirect(route('onboarding'));
 });
 
@@ -30,6 +30,6 @@ it('successfully renders the dashboard for an authenticated user with a team', f
     $user->save();
 
     actingAs($user)
-        ->get(route('dashboard'))
+        ->get(scoped_route('dashboard', $team))
         ->assertOk();
 });

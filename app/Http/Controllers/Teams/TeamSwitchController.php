@@ -20,6 +20,6 @@ final readonly class TeamSwitchController
 
         $user->switchToTeam($team);
 
-        return to_route('dashboard');
+        return to_route('dashboard', ['current_team' => $team->slug]);
     }
 }

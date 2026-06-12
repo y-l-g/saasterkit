@@ -33,7 +33,7 @@ it('can verify the email', function (): void {
 
     Event::assertDispatched(Verified::class);
     expect($user->fresh()->hasVerifiedEmail())->toBeTrue();
-    $response->assertRedirect(route('dashboard', absolute: false));
+    $response->assertRedirect('/dashboard');
 });
 
 it('does not verify with an invalid hash', function (): void {
@@ -75,7 +75,7 @@ it('redirects a verified user from the verification prompt', function (): void {
     $response = actingAs($user)->get(route('verification.notice'));
 
     Event::assertNotDispatched(Verified::class);
-    $response->assertRedirect(route('dashboard', absolute: false));
+    $response->assertRedirect('/dashboard');
 });
 
 it('redirects an already verified user visiting the verification link without firing event', function (): void {
@@ -89,7 +89,7 @@ it('redirects an already verified user visiting the verification link without fi
     );
 
     actingAs($user)->get($verificationUrl)
-        ->assertRedirect(route('dashboard', absolute: false));
+        ->assertRedirect('/dashboard');
 
     Event::assertNotDispatched(Verified::class);
     expect($user->fresh()->hasVerifiedEmail())->toBeTrue();

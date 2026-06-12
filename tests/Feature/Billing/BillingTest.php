@@ -24,7 +24,7 @@ it('allows a user to start a checkout session', function (): void {
     $priceId = $plan->prices['month'];
 
     actingAs($user)
-        ->get(route('billing.checkout', ['stripePriceId' => $priceId, 'team' => $team]))
+        ->get(scoped_route('billing.checkout', $team, ['stripePriceId' => $priceId]))
         ->assertRedirectContains('https://checkout.stripe.com');
 });
 
@@ -36,6 +36,6 @@ it('allows a user to be redirected to the billing portal', function (): void {
     $team->createAsStripeCustomer();
 
     actingAs($user)
-        ->get(route('billing.portal', ['team' => $team]))
+        ->get(scoped_route('billing.portal', $team))
         ->assertRedirectContains('https://billing.stripe.com');
 });

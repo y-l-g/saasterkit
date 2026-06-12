@@ -17,7 +17,7 @@ const confirmingTeamDeletion = ref(false);
 const form = useForm({ password: '' });
 
 const deleteTeam = (close: () => void) => {
-    form.submit(destroy(props.team), {
+    form.submit(destroy(props.team.slug), {
         onSuccess: () => {
             close();
             form.reset();
@@ -33,7 +33,7 @@ const isRedirecting = ref(false);
 const goToPortal = () => {
     isRedirecting.value = true;
     router.get(
-        portal(props.team.id).url,
+        portal(props.team.slug).url,
         {},
         {
             onFinish: () => {
@@ -62,7 +62,9 @@ const goToPortal = () => {
         >
         <template #description v-else
             >To delete this team, you must
-            <ULink class="underline" :to="edit().url">define a password</ULink>
+            <ULink class="underline" :to="edit(props.team.slug).url"
+                >define a password</ULink
+            >
         </template>
         <UModal
             v-if="!team.subscription?.id || team.subscription?.endsAt"

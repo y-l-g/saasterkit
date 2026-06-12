@@ -5,14 +5,16 @@ import { settings } from '@/routes/user';
 import { update } from '@/routes/user-password';
 import { Form } from '@inertiajs/vue3';
 
+const page = useAuthPage();
+const currentTeamSlug = page.props.user.currentTeam!.slug;
+
 const breadcrumbs = [
-    { label: 'Settings', to: settings().url },
+    { label: 'Settings', to: settings(currentTeamSlug).url },
     { label: 'Password' },
 ];
 useHead({
     title: 'Password settings',
 });
-const page = useAuthPage();
 </script>
 
 <template>

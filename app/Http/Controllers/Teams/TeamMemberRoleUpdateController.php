@@ -11,9 +11,9 @@ use Illuminate\Http\RedirectResponse;
 
 final readonly class TeamMemberRoleUpdateController
 {
-    public function __invoke(TeamMemberRoleUpdateRequest $request, Team $team, User $user): RedirectResponse
+    public function __invoke(TeamMemberRoleUpdateRequest $request, Team $current_team, User $user): RedirectResponse
     {
-        $team->users()->updateExistingPivot($user->id, [
+        $current_team->users()->updateExistingPivot($user->id, [
             'role' => $request->input('role'),
         ]);
 

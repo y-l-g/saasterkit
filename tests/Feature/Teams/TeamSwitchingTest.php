@@ -19,7 +19,7 @@ it('allows a user to switch their active team', function (): void {
 
     actingAs($user)
         ->put(route('teams.current.update'), ['team_id' => $team2->id])
-        ->assertRedirect(route('dashboard'));
+        ->assertRedirect(scoped_route('dashboard', $team2));
 
     expect($user->fresh()->current_team_id)->toBe($team2->id);
 });

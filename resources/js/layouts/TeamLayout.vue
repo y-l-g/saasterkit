@@ -23,11 +23,12 @@ const orientation = computed(() => {
 });
 
 const links = computed<NavigationMenuItem[][]>(() => {
+    const currentTeamSlug = page.props.user.currentTeam!.slug;
     const menuLinks = [
         {
             label: 'Team Settings',
             icon: 'i-lucide-user',
-            to: show(page.props.user.currentTeamId!).url,
+            to: show(currentTeamSlug).url,
         },
     ];
 
@@ -35,7 +36,7 @@ const links = computed<NavigationMenuItem[][]>(() => {
         menuLinks.push({
             label: 'Billing',
             icon: 'i-lucide-circle-dollar-sign',
-            to: showBilling(page.props.user.currentTeamId!).url,
+            to: showBilling(currentTeamSlug).url,
         });
     }
 

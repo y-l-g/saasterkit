@@ -22,9 +22,9 @@ it('denies access if user is not team owner', function (): void {
     $member = User::factory()->create();
     $this->team->users()->syncWithPivotValues($member->id, ['role' => 'editor'], false);
 
-    actingAs($member)->get(route('billing.show', $this->team))->assertForbidden();
+    actingAs($member)->get(scoped_route('billing.show', $this->team))->assertForbidden();
 });
 
 it('renders the billing settings page for a team owner', function (): void {
-    actingAs($this->user)->get(route('billing.show', $this->team))->assertOk();
+    actingAs($this->user)->get(scoped_route('billing.show', $this->team))->assertOk();
 });

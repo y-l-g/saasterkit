@@ -17,17 +17,19 @@ final readonly class CreateStripeCheckoutController
 {
     public function __construct(private PlanService $planService) {}
 
-    public function __invoke(Request $request, string $stripPriceId, Team $team): Response|RedirectResponse
+    public function __invoke(Request $request, Team $current_team, string $stripePriceId): Response|RedirectResponse
     {
+        $team = $current_team;
+
         Gate::authorize(TeamMemberPermissionEnum::BILLING_CHECKOUT_CREATE, $team);
 
         if ($team->subscribed('default')) {
             return Inertia::location($team->billingPortalUrl(
-                route('billing.show', ['team' => $team->id])
+                route('billing.show', ['current_team' => $team->slug])
             ));
         }
 
-        if (! $this->planService->priceIdExists($stripPriceId)) {
+        if (! $this->planService->priceIdExists($stripePriceId)) {
             return back()->with('error', 'Invalid plan ID.');
         }
 
@@ -35,11 +37,11 @@ final readonly class CreateStripeCheckoutController
 
         $team->updateOrCreateStripeCustomer(['email' => $userEmail]);
 
-        $checkout = $team->newSubscription('default', $stripPriceId)
+        $checkout = $team->newSubscription('default', $stripePriceId)
             ->trialDays(14)
             ->checkout([
-                'success_url' => route('billing.show', ['success' => 'You have been subscribed', 'team' => $team->id]),
-                'cancel_url' => route('billing.show', ['error' => 'The subscription has been canceled', 'team' => $team->id]),
+                'success_url' => route('billing.show', ['current_team' => $team->slug, 'success' => 'You have been subscribed']),
+                'cancel_url' => route('billing.show', ['current_team' => $team->slug, 'error' => 'The subscription has been canceled']),
                 // 'billing_address_collection' => 'required',
                 'customer_update' => [
                     'name' => 'auto',

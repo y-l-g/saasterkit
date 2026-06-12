@@ -16,7 +16,7 @@ const form = useForm({
 });
 
 const updateTeamName = () => {
-    form.submit(update(props.team), {
+    form.submit(update(props.team.slug), {
         preserveScroll: true,
     });
 };

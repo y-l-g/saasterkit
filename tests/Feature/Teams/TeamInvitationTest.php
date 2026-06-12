@@ -23,7 +23,7 @@ beforeEach(function (): void {
 
 it('allows an authorized user to send a team invitation', function (): void {
     actingAs($this->owner)
-        ->post(route('teams.members.store', $this->team), [
+        ->post(scoped_route('teams.members.store', $this->team), [
             'email' => 'new@member.com',
             'role' => 'editor',
         ])
@@ -44,7 +44,7 @@ it('fails if the user is already a member of the team', function (): void {
     $this->team->users()->sync($member, false);
 
     actingAs($this->owner)
-        ->post(route('teams.members.store', $this->team), [
+        ->post(scoped_route('teams.members.store', $this->team), [
             'email' => $member->email,
             'role' => 'editor',
         ])

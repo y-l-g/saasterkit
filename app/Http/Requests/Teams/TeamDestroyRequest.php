@@ -14,7 +14,7 @@ class TeamDestroyRequest extends FormRequest
     public function authorize(): bool
     {
         /** @var Team $team */
-        $team = $this->route('team');
+        $team = $this->route('current_team');
 
         return Gate::allows(TeamMemberPermissionEnum::TEAM_DELETE, $team);
     }

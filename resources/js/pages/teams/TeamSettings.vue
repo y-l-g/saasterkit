@@ -20,7 +20,7 @@ const props = defineProps<{
 const breadcrumbs = computed(() => [
     {
         label: props.team.name,
-        to: show({ team: props.team.id }).url,
+        to: show(props.team.slug).url,
     },
 ]);
 

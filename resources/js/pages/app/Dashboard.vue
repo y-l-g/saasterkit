@@ -2,11 +2,14 @@
 import AppLayout from '@/layouts/AppLayout.vue';
 import { dashboard } from '@/routes';
 import type { BreadcrumbItem } from '@nuxt/ui';
+import { useAuthPage } from '@/composables/useAuthPage';
+
+const page = useAuthPage();
 
 const breadcrumbs = [
     {
         label: 'Dashboard',
-        to: dashboard().url,
+        to: dashboard(page.props.user.currentTeam!.slug).url,
     },
 ] satisfies BreadcrumbItem[];
 

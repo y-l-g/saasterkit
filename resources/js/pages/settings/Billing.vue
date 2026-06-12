@@ -17,7 +17,7 @@ const props = defineProps<Props>();
 const breadcrumbs = computed(() => [
     {
         label: props.team.name,
-        to: show({ team: props.team.id }).url,
+        to: show(props.team.slug).url,
     },
     {
         label: 'Billing',
@@ -34,8 +34,8 @@ const handleSubscribeForTeam = ({
     isProcessingCheckout.value = true;
     router.get(
         checkout({
+            current_team: props.team.slug,
             stripePriceId: stripePriceId,
-            team: props.team.id,
         }).url,
         {},
         { onFinish: () => (isProcessingCheckout.value = false) },
@@ -95,7 +95,7 @@ const isRedirecting = ref(false);
 const goToPortal = () => {
     isRedirecting.value = true;
     router.get(
-        portal(props.team.id).url,
+        portal(props.team.slug).url,
         {},
         {
             onFinish: () => {

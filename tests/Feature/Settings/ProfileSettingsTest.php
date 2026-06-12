@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Models\Team;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -11,7 +12,9 @@ uses(RefreshDatabase::class);
 
 it('renders the profile settings page', function (): void {
     $user = User::factory()->create();
-    actingAs($user)->get(route('profile.edit'))->assertOk();
+    $team = Team::factory()->create(['user_id' => $user->id]);
+
+    actingAs($user)->get(scoped_route('profile.edit', $team))->assertOk();
 });
 
 it('allows a user to update their name and email', function (): void {

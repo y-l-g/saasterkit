@@ -23,7 +23,7 @@ it('allows users to authenticate using the login screen', function (): void {
     post(route('login.store'), [
         'email' => $user->email,
         'password' => 'password',
-    ])->assertRedirect(route('dashboard', absolute: false));
+    ])->assertRedirect('/dashboard');
 
     assertAuthenticated();
 });
