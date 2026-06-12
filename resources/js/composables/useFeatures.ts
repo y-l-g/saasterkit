@@ -5,9 +5,7 @@ export function useFeatures() {
         featureName: App.Enums.Billing.FeatureEnum,
     ): boolean => {
         const subscription = usePage().props.user?.currentTeam?.subscription;
-        const features = subscription?.valid
-            ? subscription.plan.features
-            : [];
+        const features = subscription?.valid ? subscription.plan.features : [];
 
         return features.includes(featureName);
     };
