@@ -1,7 +1,8 @@
+import inertia from '@inertiajs/vite';
 import { wayfinder } from '@laravel/vite-plugin-wayfinder';
 import ui from '@nuxt/ui/vite';
 import tailwindcss from '@tailwindcss/vite';
-import UnheadVite from '@unhead/addons/vite';
+import { Unhead as UnheadVite } from '@unhead/bundler/vite';
 import { unheadVueComposablesImports } from '@unhead/vue';
 import vue from '@vitejs/plugin-vue';
 import laravel from 'laravel-vite-plugin';
@@ -15,6 +16,7 @@ export default defineConfig({
             ssr: 'resources/js/ssr.ts',
             refresh: true,
         }),
+        inertia(),
         tailwindcss(),
         wayfinder({
             formVariants: true,
@@ -28,7 +30,7 @@ export default defineConfig({
             },
         }),
         ui({
-            inertia: true,
+            router: 'inertia',
             autoImport: {
                 imports: [unheadVueComposablesImports],
             },
@@ -59,6 +61,18 @@ export default defineConfig({
         }),
         UnheadVite(),
     ],
+    server: {
+        host: '0.0.0.0',
+        port: 5173,
+        strictPort: true,
+        hmr: {
+            host: 'localhost',
+            clientPort: 5173,
+        },
+        watch: {
+            ignored: ['**/vendor/**', '**/storage/**'],
+        },
+    },
     ssr: {
         noExternal: ['@nuxt/ui'],
     },
