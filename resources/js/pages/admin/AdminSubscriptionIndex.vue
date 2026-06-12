@@ -154,6 +154,7 @@ const columns: TableColumn<App.Data.Billing.SubscriptionData>[] = [
                         icon="i-lucide-filter"
                         color="neutral"
                         variant="subtle"
+                        aria-label="Filter subscriptions"
                     />
 
                     <template #content>

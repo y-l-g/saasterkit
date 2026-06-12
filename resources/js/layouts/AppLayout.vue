@@ -42,12 +42,14 @@ const bottomlinks: NavigationMenuItem[] = [
         icon: 'i-lucide-folder',
         to: 'https://github.com/y-l-g/saasterkit',
         target: '_blank',
+        rel: 'noopener noreferrer',
     },
     {
         label: 'Documentation',
         icon: 'i-lucide-info',
         to: 'https://doc.saasterkit.com',
         target: '_blank',
+        rel: 'noopener noreferrer',
     },
 ];
 </script>
@@ -72,6 +74,7 @@ const bottomlinks: NavigationMenuItem[] = [
                     class="data-[state=open]:bg-elevated"
                     :class="[!collapsed && 'py-2']"
                     :to="dashboardUrl"
+                    aria-label="Dashboard"
                     ><span v-if="!collapsed"
                         ><span class="text-default">Saas</span>terkit</span
                     ></UButton
@@ -127,6 +130,7 @@ const bottomlinks: NavigationMenuItem[] = [
                                 color="neutral"
                                 variant="ghost"
                                 square
+                                aria-label="Open notifications"
                                 @click="isNotificationsSlideoverOpen = true"
                             >
                                 <UChip
@@ -150,6 +154,7 @@ const bottomlinks: NavigationMenuItem[] = [
                             icon="i-lucide-shield"
                             variant="subtle"
                             color="info"
+                            aria-label="Admin dashboard"
                         ></UButton>
                         <UserMenu
                     /></template>

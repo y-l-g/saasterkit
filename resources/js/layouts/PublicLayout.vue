@@ -44,6 +44,7 @@ const footerItems: NavigationMenuItem[] = [
         label: 'Documentation',
         to: 'https://doc.saasterkit.com',
         target: '_blank',
+        rel: 'noopener noreferrer',
     },
 ];
 </script>
@@ -63,6 +64,7 @@ const footerItems: NavigationMenuItem[] = [
                 size="xl"
                 :icon="ILucideDollarSign"
                 class="cursor-pointer"
+                aria-label="Home"
                 ><span v-if="!isXs" class="ml-[-12px]"
                     ><span class="text-default">aas</span>terkit</span
                 ></UButton
@@ -82,6 +84,7 @@ const footerItems: NavigationMenuItem[] = [
                     variant="link"
                     to="https://github.com/y-l-g/saasterkit"
                     target="_blank"
+                    rel="noopener noreferrer"
                     :icon="ILucideGithub"
                     aria-label="GitHub"
                 />
@@ -130,10 +133,12 @@ const footerItems: NavigationMenuItem[] = [
                 variant="link"
                 to="https://x.com/_y_l_g_"
                 target="_blank"
+                rel="noopener noreferrer"
                 aria-label="X" />
             <UButton
                 to="https://github.com/y-l-g/saasterkit"
                 target="_blank"
+                rel="noopener noreferrer"
                 color="neutral"
                 variant="link"
                 :icon="ILucideGithub"

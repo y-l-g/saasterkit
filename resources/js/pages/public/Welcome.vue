@@ -171,6 +171,7 @@ const features = [
                         <UButton
                             to="https://github.com/y-l-g/saasterkit"
                             target="_blank"
+                            rel="noopener noreferrer"
                             size="xl"
                             label="Star on GitHub"
                             color="neutral"

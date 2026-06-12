@@ -38,6 +38,7 @@ const removeTeamMember = (close: () => void) => {
             variant="subtle"
             icon="i-lucide-log-out"
             class="size-8"
+            aria-label="Remove team member"
         ></UButton>
         <template #body="{ close }">
             <div class="mt-6 flex justify-end gap-3">

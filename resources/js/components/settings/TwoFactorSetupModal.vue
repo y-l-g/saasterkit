@@ -175,6 +175,11 @@ watch(
                                 :icon="
                                     copied ? 'i-lucide-check' : 'i-lucide-copy'
                                 "
+                                :aria-label="
+                                    copied
+                                        ? 'Copied setup key'
+                                        : 'Copy setup key'
+                                "
                             />
                         </UFieldGroup>
                     </template>

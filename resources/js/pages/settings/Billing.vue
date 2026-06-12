@@ -84,8 +84,10 @@ const columns: TableColumn<App.Data.Billing.InvoiceData>[] = [
             return h(UButton, {
                 to: row.getValue('url'),
                 target: '_blank',
+                rel: 'noopener noreferrer',
                 variant: 'link',
                 icon: 'i-lucide-download',
+                'aria-label': `Download invoice ${row.getValue('number')}`,
             });
         },
     },

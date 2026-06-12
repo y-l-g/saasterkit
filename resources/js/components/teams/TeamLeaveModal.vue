@@ -38,6 +38,7 @@ const leaveTeam = (close: () => void) => {
                 block
                 icon="i-lucide-log-out"
                 :disabled="team.userId === page.props.user.id"
+                aria-label="Leave team"
             ></UButton>
         </div>
         <template #body="{ close }">
