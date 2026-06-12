@@ -40,6 +40,8 @@ use Illuminate\Support\Carbon;
 ])]
 class TeamInvitation extends Model
 {
+    public const int DEFAULT_EXPIRATION_DAYS = 7;
+
     /** @use HasFactory<TeamInvitationFactory> */
     use HasFactory;
 
@@ -56,5 +58,10 @@ class TeamInvitation extends Model
     public function team(): BelongsTo
     {
         return $this->belongsTo(Team::class);
+    }
+
+    public static function defaultExpiresAt(): Carbon
+    {
+        return now()->addDays(self::DEFAULT_EXPIRATION_DAYS);
     }
 }

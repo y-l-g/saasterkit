@@ -10,6 +10,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Team;
 use App\Models\TeamInvitation;
 use App\Models\User;
+use App\Support\EmailAddress;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -33,7 +34,7 @@ class UserTeamIndexShowController extends Controller
             'teams' => $teams,
             'invitations' => TeamInvitationData::collect(
                 TeamInvitation::with('team')
-                    ->where('email', $user->email)
+                    ->whereRaw('lower(email) = ?', [EmailAddress::normalize($user->email)])
                     ->get(),
             ),
         ]);

@@ -24,7 +24,7 @@ beforeEach(function (): void {
 it('allows an authorized user to send a team invitation', function (): void {
     actingAs($this->owner)
         ->post(scoped_route('teams.members.store', $this->team), [
-            'email' => 'new@member.com',
+            'email' => '  New@Member.COM  ',
             'role' => 'editor',
         ])
         ->assertSessionHas('success');
@@ -59,4 +59,12 @@ it('allows an authorized user to cancel a pending invitation', function (): void
         ->assertSessionHas('success');
 
     assertDatabaseMissing('team_invitations', ['id' => $invitation->id]);
+});
+
+it('sends team invitation emails with expiring signed links', function (): void {
+    $invitation = TeamInvitation::factory()->create(['team_id' => $this->team->id]);
+
+    $mail = (new TeamInvitationNotification($invitation))->toMail($this->owner);
+
+    expect(parse_url($mail->actionUrl, PHP_URL_QUERY))->toContain('expires=');
 });

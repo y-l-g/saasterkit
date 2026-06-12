@@ -7,6 +7,7 @@ namespace App\Http\Requests\Teams;
 use App\Enums\Teams\TeamMemberPermissionEnum;
 use App\Models\Team;
 use App\Models\User;
+use App\Support\EmailAddress;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\Validator;
@@ -19,6 +20,13 @@ class TeamOwnershipInvitationSendRequest extends FormRequest
         $team = $this->route('current_team');
 
         return Gate::allows(TeamMemberPermissionEnum::TEAM_OWNER_TRANSFER, $team);
+    }
+
+    protected function prepareForValidation(): void
+    {
+        $this->merge([
+            'email' => EmailAddress::normalize($this->input('email')),
+        ]);
     }
 
     /**
@@ -41,6 +49,10 @@ class TeamOwnershipInvitationSendRequest extends FormRequest
                 /** @var Team $team */
                 $team = $this->route('current_team');
                 $email = $this->input('email');
+
+                if (! is_string($email)) {
+                    return;
+                }
 
                 $newOwner = User::query()->where('email', $email)->first();
 

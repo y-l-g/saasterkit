@@ -7,6 +7,7 @@ namespace App\Http\Requests\Teams;
 use App\Enums\Teams\RoleEnum;
 use App\Enums\Teams\TeamMemberPermissionEnum;
 use App\Models\Team;
+use App\Support\EmailAddress;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\Rule;
@@ -20,6 +21,13 @@ class TeamInvitationSendRequest extends FormRequest
         $team = $this->route('current_team');
 
         return Gate::allows(TeamMemberPermissionEnum::TEAM_MEMBER_INVITE, $team);
+    }
+
+    protected function prepareForValidation(): void
+    {
+        $this->merge([
+            'email' => EmailAddress::normalize($this->input('email')),
+        ]);
     }
 
     /**
@@ -61,11 +69,12 @@ class TeamInvitationSendRequest extends FormRequest
                 $team = $this->route('current_team');
                 $email = $this->input('email');
 
-                if (is_string($email) && $team->hasUserWithEmail($email)) {
-                    $validator->errors()->add(
-                        'email',
-                        'This user already belongs to the team.'
-                    );
+                if (! is_string($email)) {
+                    return;
+                }
+
+                if ($team->hasUserWithEmail($email)) {
+                    $validator->errors()->add('email', 'This user already belongs to the team.');
                 }
             },
         ];

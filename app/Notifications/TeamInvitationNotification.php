@@ -36,15 +36,18 @@ class TeamInvitationNotification extends Notification implements ShouldQueue
      */
     public function toMail(object $notifiable): MailMessage
     {
-        $acceptUrl = URL::signedRoute('team.invitations.mail.accept', [
-            'invitation' => $this->invitation,
-        ]);
+        $acceptUrl = URL::temporarySignedRoute(
+            'team.invitations.mail.accept',
+            TeamInvitation::defaultExpiresAt(),
+            ['invitation' => $this->invitation],
+        );
 
         return (new MailMessage)
             ->subject(Lang::get('Team Invitation'))
             ->line(Lang::get('You have been invited to join the **:team** team!', ['team' => $this->invitation->team->name]))
             ->line(Lang::get('If you do not have an account, you may create one by clicking the button below.'))
             ->line(Lang::get('If you already have an account, you may accept this invitation by clicking the button below:'))
+            ->line(Lang::get('This invitation will expire in :days days.', ['days' => TeamInvitation::DEFAULT_EXPIRATION_DAYS]))
             ->action(Lang::get('Accept Invitation'), $acceptUrl)
             ->line(Lang::get('If you did not expect to receive an invitation to this team, you may discard this email.'));
     }

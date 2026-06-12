@@ -11,6 +11,7 @@ use App\Models\Team;
 use App\Models\TeamInvitation;
 use App\Models\TeamOwnershipInvitation;
 use App\Models\User;
+use App\Support\EmailAddress;
 use Illuminate\Auth\Access\Response;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
@@ -19,7 +20,11 @@ class AuthServiceProvider extends ServiceProvider
 {
     public function boot(): void
     {
-        Gate::before(function (User $user, string $ability) {
+        Gate::before(function (User $user, string $ability): ?bool {
+            if ($this->requiresInvitationRecipient($ability)) {
+                return null;
+            }
+
             return $user->isAdmin() ? true : null;
         });
 
@@ -28,13 +33,13 @@ class AuthServiceProvider extends ServiceProvider
         });
 
         Gate::define(AuthEnum::ACCEPT_TEAM_INVITATION, function (User $user, TeamInvitation $invitation) {
-            return $user->email === $invitation->email
+            return EmailAddress::matches($user->email, $invitation->email)
                 ? Response::allow()
                 : Response::deny("You're trying to accept an invitation with the wrong account. Please log in with the email address to which the invitation was sent.");
         });
 
         Gate::define(AuthEnum::ACCEPT_TEAM_OWNERSHIP_INVITATION, function (User $user, TeamOwnershipInvitation $invitation) {
-            return $user->email === $invitation->new_owner_email
+            return EmailAddress::matches($user->email, $invitation->new_owner_email)
                 ? Response::allow()
                 : Response::deny("You're trying to accept an invitation with the wrong account. Please log in with the email address to which the invitation was sent.");
         });
@@ -59,5 +64,14 @@ class AuthServiceProvider extends ServiceProvider
                 return $user->belongsToTeam($team) && $team->hasFeature($feature);
             });
         }
+    }
+
+    private function requiresInvitationRecipient(string $ability): bool
+    {
+        return match ($ability) {
+            AuthEnum::ACCEPT_TEAM_INVITATION->value,
+            AuthEnum::ACCEPT_TEAM_OWNERSHIP_INVITATION->value => true,
+            default => false,
+        };
     }
 }
