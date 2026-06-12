@@ -8,6 +8,7 @@ import { edit as EditProfile } from '@/routes/profile';
 import { show as ShowTwoFactors } from '@/routes/two-factor';
 import { teams } from '@/routes/user';
 import { useAuthPage } from '@/composables/useAuthPage';
+import { toDropdownMenuItems } from '@/utils/navigationMenu';
 import { breakpointsTailwind, useBreakpoints } from '@vueuse/core';
 import { computed } from 'vue';
 import AppLayout from './AppLayout.vue';
@@ -54,6 +55,7 @@ const links = computed(() => [
         },
     ],
 ]);
+const dropdownLinks = computed(() => toDropdownMenuItems(links.value));
 
 const activeLabel = computed(() => {
     const allLinks = links.value.flat();
@@ -73,7 +75,7 @@ const activeLabel = computed(() => {
             />
             <UDropdownMenu
                 v-else
-                :items="links"
+                :items="dropdownLinks"
                 :content="{
                     align: 'start',
                     side: 'bottom',

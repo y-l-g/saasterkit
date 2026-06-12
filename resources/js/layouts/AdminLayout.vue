@@ -2,6 +2,7 @@
 import { dashboard } from '@/routes/admin';
 import { index as Notificationsindex } from '@/routes/admin/notifications';
 import { index } from '@/routes/admin/subscriptions';
+import { toDropdownMenuItems } from '@/utils/navigationMenu';
 import { usePage } from '@inertiajs/vue3';
 import { BreadcrumbItem, NavigationMenuItem } from '@nuxt/ui';
 import { breakpointsTailwind, useBreakpoints } from '@vueuse/core';
@@ -38,6 +39,7 @@ const links: NavigationMenuItem[][] = [
         },
     ],
 ];
+const dropdownLinks = computed(() => toDropdownMenuItems(links));
 
 const activeLabel = computed(() => {
     const allLinks = links.flat();
@@ -57,7 +59,7 @@ const activeLabel = computed(() => {
             />
             <UDropdownMenu
                 v-else
-                :items="links"
+                :items="dropdownLinks"
                 :content="{
                     align: 'start',
                     side: 'bottom',

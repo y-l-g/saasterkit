@@ -22,6 +22,32 @@ const codeValue = computed<string>(() => code.value.join(''));
 
 const pinInputContainerRef = useTemplateRef('pinInputContainerRef');
 
+function getConfirmationCodeError(
+    errors: Record<string, unknown>,
+): string | undefined {
+    if (typeof errors.code === 'string') {
+        return errors.code;
+    }
+
+    const confirmationError = errors.confirmTwoFactorAuthentication;
+
+    if (typeof confirmationError === 'string') {
+        return confirmationError;
+    }
+
+    if (
+        typeof confirmationError === 'object' &&
+        confirmationError !== null &&
+        'code' in confirmationError
+    ) {
+        const codeError = confirmationError.code;
+
+        return typeof codeError === 'string' ? codeError : undefined;
+    }
+
+    return undefined;
+}
+
 const modalConfig = computed<{
     title: string;
     description: string;
@@ -156,6 +182,7 @@ watch(
                 <Form
                     v-else
                     v-bind="confirm.form()"
+                    error-bag="confirmTwoFactorAuthentication"
                     reset-on-error
                     @finish="code = []"
                     @success="open = false"
@@ -168,9 +195,7 @@ watch(
                     >
                         <UFormField
                             name="code"
-                            :error="
-                                errors?.confirmTwoFactorAuthentication?.code
-                            "
+                            :error="getConfirmationCodeError(errors)"
                             class="flex justify-center"
                             required
                         >

@@ -3,6 +3,7 @@ import { useAuthPage } from '@/composables/useAuthPage';
 import { useTeamPermissions } from '@/composables/useTeamPermissions';
 import { show as showBilling } from '@/routes/billing';
 import { show } from '@/routes/teams/settings';
+import { toDropdownMenuItems } from '@/utils/navigationMenu';
 import { BreadcrumbItem, NavigationMenuItem } from '@nuxt/ui';
 import { breakpointsTailwind, useBreakpoints } from '@vueuse/core';
 import { computed } from 'vue';
@@ -42,6 +43,7 @@ const links = computed<NavigationMenuItem[][]>(() => {
 
     return [menuLinks];
 });
+const dropdownLinks = computed(() => toDropdownMenuItems(links.value));
 
 const activeLabel = computed(() => {
     const allLinks = links.value.flat();
@@ -61,7 +63,7 @@ const activeLabel = computed(() => {
             />
             <UDropdownMenu
                 v-else
-                :items="links"
+                :items="dropdownLinks"
                 :content="{
                     align: 'start',
                     side: 'bottom',
