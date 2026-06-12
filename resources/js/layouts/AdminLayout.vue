@@ -2,6 +2,7 @@
 import { dashboard } from '@/routes/admin';
 import { index as Notificationsindex } from '@/routes/admin/notifications';
 import { index } from '@/routes/admin/subscriptions';
+import { isCurrentUrl } from '@/utils/currentUrl';
 import { toDropdownMenuItems } from '@/utils/navigationMenu';
 import { usePage } from '@inertiajs/vue3';
 import { BreadcrumbItem, NavigationMenuItem } from '@nuxt/ui';
@@ -18,6 +19,7 @@ const isMobile = breakpoints.smallerOrEqual('sm');
 const orientation = computed(() => {
     return isMobile.value ? 'vertical' : 'horizontal';
 });
+const page = usePage();
 
 const links: NavigationMenuItem[][] = [
     [
@@ -43,7 +45,9 @@ const dropdownLinks = computed(() => toDropdownMenuItems(links));
 
 const activeLabel = computed(() => {
     const allLinks = links.flat();
-    const activeLink = allLinks.find((link) => link.to === usePage().url);
+    const activeLink = allLinks.find((link) =>
+        isCurrentUrl(page.url, link.to as string | undefined, link.exact),
+    );
     return activeLink?.label || 'Settings';
 });
 </script>

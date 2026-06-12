@@ -3,6 +3,7 @@ import { useAuthPage } from '@/composables/useAuthPage';
 import { useTeamPermissions } from '@/composables/useTeamPermissions';
 import { show as showBilling } from '@/routes/billing';
 import { show } from '@/routes/teams/settings';
+import { isCurrentUrl } from '@/utils/currentUrl';
 import { toDropdownMenuItems } from '@/utils/navigationMenu';
 import { BreadcrumbItem, NavigationMenuItem } from '@nuxt/ui';
 import { breakpointsTailwind, useBreakpoints } from '@vueuse/core';
@@ -47,7 +48,9 @@ const dropdownLinks = computed(() => toDropdownMenuItems(links.value));
 
 const activeLabel = computed(() => {
     const allLinks = links.value.flat();
-    const activeLink = allLinks.find((link) => link.to === page.url);
+    const activeLink = allLinks.find((link) =>
+        isCurrentUrl(page.url, link.to as string | undefined, link.exact),
+    );
     return activeLink?.label || 'Settings';
 });
 </script>

@@ -8,6 +8,7 @@ import { edit as EditProfile } from '@/routes/profile';
 import { show as ShowTwoFactors } from '@/routes/two-factor';
 import { teams } from '@/routes/user';
 import { useAuthPage } from '@/composables/useAuthPage';
+import { isCurrentUrl } from '@/utils/currentUrl';
 import { toDropdownMenuItems } from '@/utils/navigationMenu';
 import { breakpointsTailwind, useBreakpoints } from '@vueuse/core';
 import { computed } from 'vue';
@@ -59,7 +60,9 @@ const dropdownLinks = computed(() => toDropdownMenuItems(links.value));
 
 const activeLabel = computed(() => {
     const allLinks = links.value.flat();
-    const activeLink = allLinks.find((link) => link.to === page.url);
+    const activeLink = allLinks.find((link) =>
+        isCurrentUrl(page.url, link.to as string | undefined, link.exact),
+    );
     return activeLink?.label || 'Settings';
 });
 </script>

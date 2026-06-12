@@ -6,6 +6,7 @@ import { useAuthPage } from '@/composables/useAuthPage';
 import { useDashboard } from '@/composables/useDashboard';
 import { AppLogoIcon } from '@/icons/AppLogoIcon';
 import { admin, dashboard } from '@/routes';
+import { isCurrentUrl } from '@/utils/currentUrl';
 import type { BreadcrumbItem, NavigationMenuItem } from '@nuxt/ui';
 import { computed, ref } from 'vue';
 
@@ -29,7 +30,7 @@ const hasCurrentTeamlinks = computed<NavigationMenuItem[]>(() => [
         label: 'Dashboard',
         icon: 'i-lucide-house',
         to: dashboardUrl.value,
-        active: page.url === dashboardUrl.value,
+        active: isCurrentUrl(page.url, dashboardUrl.value, true),
         onSelect: () => {
             open.value = false;
         },
