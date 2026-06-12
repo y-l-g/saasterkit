@@ -1,15 +1,18 @@
 <?php
 
 use App\Http\Middleware\DisableSsr;
+use App\Http\Middleware\EnsureTeamMembership;
 use App\Http\Middleware\EnsureUserHasPassword;
 use App\Http\Middleware\EnsureUserIsAdmin;
 use App\Http\Middleware\EnsureUserTeamIsConsistent;
 use App\Http\Middleware\HandleInertiaRequests;
 use App\Http\Middleware\RedirectIfNoTeam;
+use App\Http\Middleware\SetTeamUrlDefaults;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets;
+use Illuminate\Routing\Middleware\SubstituteBindings;
 use Symfony\Component\HttpFoundation\Request;
 
 return Application::configure(basePath: dirname(__DIR__))
@@ -25,6 +28,7 @@ return Application::configure(basePath: dirname(__DIR__))
             HandleInertiaRequests::class,
             AddLinkHeadersForPreloadedAssets::class,
             EnsureUserTeamIsConsistent::class,
+            SetTeamUrlDefaults::class,
         ]);
         $middleware->preventRequestForgery(except: [
             'stripe/*',
@@ -42,8 +46,14 @@ return Application::configure(basePath: dirname(__DIR__))
             'has.password' => EnsureUserHasPassword::class,
             'admin' => EnsureUserIsAdmin::class,
             'has.team' => RedirectIfNoTeam::class,
+            'team.member' => EnsureTeamMembership::class,
             'nossr' => DisableSsr::class,
         ]);
+
+        $middleware->prependToPriorityList(
+            before: SubstituteBindings::class,
+            prepend: SetTeamUrlDefaults::class,
+        );
 
     })
     ->withExceptions(function (Exceptions $exceptions): void {

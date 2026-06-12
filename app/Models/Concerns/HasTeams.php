@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\URL;
 
 /** @mixin User */
 trait HasTeams
@@ -35,6 +36,10 @@ trait HasTeams
         }
         $this->forceFill(['current_team_id' => $team->id])->save();
         $this->setRelation('currentTeam', $team);
+        URL::defaults([
+            'current_team' => $team->slug,
+            'team' => $team->slug,
+        ]);
 
         return true;
     }
@@ -66,7 +71,15 @@ trait HasTeams
 
     public function belongsToTeam(Team|int $team): bool
     {
+        if ($team instanceof Team && $this->ownsTeam($team)) {
+            return true;
+        }
+
         $teamId = is_int($team) ? $team : $team->getKey();
+
+        if ($this->ownedTeams()->whereKey($teamId)->exists()) {
+            return true;
+        }
 
         return $this->teams()->whereKey($teamId)->exists();
     }
