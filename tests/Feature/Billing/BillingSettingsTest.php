@@ -5,6 +5,7 @@ declare(strict_types=1);
 use App\Models\Team;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Inertia\Testing\AssertableInertia as Assert;
 
 use function Pest\Laravel\actingAs;
 
@@ -26,5 +27,13 @@ it('denies access if user is not team owner', function (): void {
 });
 
 it('renders the billing settings page for a team owner', function (): void {
-    actingAs($this->user)->get(scoped_route('billing.show', $this->team))->assertOk();
+    actingAs($this->user)
+        ->get(scoped_route('billing.show', $this->team))
+        ->assertOk()
+        ->assertInertia(
+            fn (Assert $page) => $page
+                ->component('settings/Billing')
+                ->missing('invoices')
+                ->loadDeferredProps(fn (Assert $reload) => $reload->has('invoices', 0))
+        );
 });
