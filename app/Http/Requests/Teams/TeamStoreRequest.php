@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Requests\Teams;
 
+use App\Support\ReservedTeamName;
 use Illuminate\Foundation\Http\FormRequest;
 
 class TeamStoreRequest extends FormRequest
@@ -14,7 +15,7 @@ class TeamStoreRequest extends FormRequest
     }
 
     /**
-     * @return array<string, array<int, string>>
+     * @return array<string, array<int, mixed>>
      */
     public function rules(): array
     {
@@ -23,6 +24,7 @@ class TeamStoreRequest extends FormRequest
                 'required',
                 'string',
                 'max:255',
+                new ReservedTeamName,
             ],
         ];
     }

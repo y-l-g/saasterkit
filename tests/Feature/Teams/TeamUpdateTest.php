@@ -66,3 +66,20 @@ it('fails validation if the name is empty', function (): void {
         ->put(scoped_route('teams.update', $team), ['name' => ''])
         ->assertSessionHasErrors('name');
 });
+
+it('fails validation if the updated name is reserved', function (): void {
+    $user = User::factory()->create();
+    $team = Team::factory()->create([
+        'name' => 'Original Team',
+        'user_id' => $user->id,
+    ]);
+
+    actingAs($user)
+        ->put(scoped_route('teams.update', $team), ['name' => 'Billing'])
+        ->assertSessionHasErrors('name');
+
+    $team->refresh();
+
+    expect($team->name)->toBe('Original Team');
+    expect($team->slug)->toBe('original-team');
+});

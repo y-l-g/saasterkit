@@ -6,6 +6,7 @@ namespace App\Http\Requests\Teams;
 
 use App\Enums\Teams\TeamMemberPermissionEnum;
 use App\Models\Team;
+use App\Support\ReservedTeamName;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Gate;
 
@@ -20,12 +21,12 @@ class TeamUpdateRequest extends FormRequest
     }
 
     /**
-     * @return array<string, array<int, string>>
+     * @return array<string, array<int, mixed>>
      */
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string', 'max:255'],
+            'name' => ['required', 'string', 'max:255', new ReservedTeamName],
         ];
     }
 }

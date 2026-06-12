@@ -55,6 +55,26 @@ it('validates that the team name is required', function (): void {
         ->assertSessionHasErrors('name');
 });
 
+it('rejects team names that slug to reserved paths', function (): void {
+    $user = User::factory()->create();
+
+    actingAs($user)
+        ->post(route('teams.store'), ['name' => 'Settings'])
+        ->assertSessionHasErrors('name');
+
+    expect(Team::query()->where('slug', 'settings')->exists())->toBeFalse();
+});
+
+it('rejects team names that create empty slugs', function (): void {
+    $user = User::factory()->create();
+
+    actingAs($user)
+        ->post(route('teams.store'), ['name' => '...'])
+        ->assertSessionHasErrors('name');
+
+    expect(Team::query()->where('slug', '')->exists())->toBeFalse();
+});
+
 it('redirects the user to the new teams billing page after creation', function (): void {
     $user = User::factory()->create();
 
