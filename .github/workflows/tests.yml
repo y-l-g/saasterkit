@@ -43,6 +43,9 @@ jobs:
       - name: Build Assets
         run: npm run build
 
+      - name: Frontend Tests
+        run: npm run test:frontend
+
       - name: Frontend Lint
         run: npm run lint:check
 

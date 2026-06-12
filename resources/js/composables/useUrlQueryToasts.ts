@@ -1,12 +1,12 @@
 import { router } from '@inertiajs/vue3';
-import { useToast } from '@nuxt/ui/runtime/composables/useToast.js';
 import { useUrlSearchParams, whenever } from '@vueuse/core';
 import ILucideAlertCircle from '~icons/lucide/alert-circle';
 import ILucideCheck from '~icons/lucide/check';
 import ILucideInfo from '~icons/lucide/info';
+import { useAppToast } from './useAppToast';
 
 export function useUrlQueryToasts() {
-    const toast = useToast();
+    const toast = useAppToast();
     const params = useUrlSearchParams('history');
 
     const urlToastConfig = {

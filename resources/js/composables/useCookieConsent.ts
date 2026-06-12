@@ -1,8 +1,8 @@
-import { useToast } from '@nuxt/ui/runtime/composables/useToast.js';
 import { useStorage } from '@vueuse/core';
+import { useAppToast } from './useAppToast';
 
 export function useCookieConsent() {
-    const toast = useToast();
+    const toast = useAppToast();
     const cookie = useStorage('cookie-consent', 'pending');
 
     if (cookie.value !== 'accepted') {
