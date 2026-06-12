@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Enums\Teams\RoleEnum;
 use App\Models\Team;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -32,4 +33,19 @@ it('successfully renders the dashboard for an authenticated user with a team', f
     actingAs($user)
         ->get(scoped_route('dashboard', $team))
         ->assertOk();
+});
+
+it('syncs the current team from the route team', function (): void {
+    $user = User::factory()->create();
+    $currentTeam = Team::factory()->create(['user_id' => $user->id]);
+    $routeTeam = Team::factory()->create();
+
+    $user->forceFill(['current_team_id' => $currentTeam->id])->save();
+    $routeTeam->users()->attach($user, ['role' => RoleEnum::EDITOR]);
+
+    actingAs($user)
+        ->get(scoped_route('dashboard', $routeTeam))
+        ->assertOk();
+
+    expect($user->refresh()->current_team_id)->toBe($routeTeam->id);
 });
