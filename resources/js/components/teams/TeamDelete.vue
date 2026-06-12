@@ -67,7 +67,7 @@ const goToPortal = () => {
             >
         </template>
         <UModal
-            v-if="!team.subscription?.id || team.subscription?.endsAt"
+            v-if="!team.subscription?.id"
             v-model="confirmingTeamDeletion"
             title="Delete Team"
             description="Are you sure you want to delete this team? Once a team is
@@ -124,7 +124,7 @@ const goToPortal = () => {
             v-else
             v-model="confirmingTeamDeletion"
             title="Delete Team"
-            description="You can't delete this team because it has an active subscription. Please cancel your subscription."
+            description="You can't delete this team because it has an active or ending subscription. Please cancel your subscription first."
         >
             <UButton
                 color="error"

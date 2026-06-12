@@ -37,7 +37,32 @@ it('fails if the team has an active subscription', function (): void {
 
     actingAs($user)
         ->delete(scoped_route('teams.destroy', $team), ['password' => 'password'])
-        ->assertSessionHas('error');
+        ->assertSessionHasErrors('subscription');
+});
+
+it('fails if the team has a subscription on grace period', function (): void {
+    $user = User::factory()->create();
+    $team = Team::factory()->create(['user_id' => $user->id]);
+    Subscription::factory()->canceled()->create(['team_id' => $team->id]);
+
+    actingAs($user)
+        ->delete(scoped_route('teams.destroy', $team), ['password' => 'password'])
+        ->assertSessionHasErrors('subscription');
+});
+
+it('allows deleting a team after its subscription has ended', function (): void {
+    $user = User::factory()->create();
+    $team = Team::factory()->create(['user_id' => $user->id]);
+    Subscription::factory()->canceled()->create([
+        'team_id' => $team->id,
+        'ends_at' => now()->subDay(),
+    ]);
+
+    actingAs($user)
+        ->delete(scoped_route('teams.destroy', $team), ['password' => 'password'])
+        ->assertRedirect(route('onboarding'));
+
+    assertDatabaseMissing('teams', ['id' => $team->id]);
 });
 
 it('allows an authorized user to delete a team', function (): void {

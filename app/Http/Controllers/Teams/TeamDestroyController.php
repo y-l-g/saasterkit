@@ -13,11 +13,6 @@ final readonly class TeamDestroyController
     public function __invoke(TeamDestroyRequest $request, Team $current_team): RedirectResponse
     {
         $team = $current_team;
-        $defaultSubscription = $team->subscription('default');
-
-        if ($defaultSubscription !== null && $defaultSubscription->valid() && ! $defaultSubscription->canceled()) {
-            return back()->with('error', 'You must cancel your subscription before delete this team');
-        }
 
         $team->purge();
 
