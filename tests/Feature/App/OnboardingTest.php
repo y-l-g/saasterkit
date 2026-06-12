@@ -25,6 +25,7 @@ it('displays pending team invitations for the logged in users email', function (
     $user = User::factory()->create();
     $team = Team::factory()->create();
     TeamInvitation::factory()->create(['team_id' => $team->id, 'email' => $user->email]);
+    TeamInvitation::factory()->create(['accepted_at' => now(), 'team_id' => $team->id, 'email' => $user->email]);
     TeamInvitation::factory()->create(['team_id' => $team->id, 'email' => 'another@email.com']);
 
     actingAs($user)

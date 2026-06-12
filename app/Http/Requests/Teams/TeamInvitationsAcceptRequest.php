@@ -14,6 +14,10 @@ class TeamInvitationsAcceptRequest extends FormRequest
     public function authorize(): bool
     {
         foreach (TeamInvitation::query()->whereIn('id', $this->input('invitations', []))->get() as $invitation) {
+            if (! $invitation->isPending()) {
+                return false;
+            }
+
             if (! EmailAddress::matches($invitation->email, $this->user()?->email)) {
                 return false;
             }

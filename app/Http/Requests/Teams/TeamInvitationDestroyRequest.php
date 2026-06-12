@@ -8,6 +8,7 @@ use App\Enums\Teams\TeamMemberPermissionEnum;
 use App\Models\TeamInvitation;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Validation\ValidationException;
 
 class TeamInvitationDestroyRequest extends FormRequest
 {
@@ -25,5 +26,18 @@ class TeamInvitationDestroyRequest extends FormRequest
     public function rules(): array
     {
         return [];
+    }
+
+    /**
+     * @throws ValidationException
+     */
+    protected function passedValidation(): void
+    {
+        /** @var TeamInvitation $invitation */
+        $invitation = $this->route('invitation');
+
+        throw_if($invitation->isAccepted(), ValidationException::withMessages([
+            'invitation' => __('validation.exists', ['attribute' => 'invitation']),
+        ]));
     }
 }

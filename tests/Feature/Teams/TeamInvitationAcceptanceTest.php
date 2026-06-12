@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\URL;
 
 use function Pest\Laravel\actingAs;
 use function Pest\Laravel\assertDatabaseHas;
-use function Pest\Laravel\assertDatabaseMissing;
 
 uses(RefreshDatabase::class);
 
@@ -26,7 +25,8 @@ it('allows a logged in user to accept an invitation via a signed url', function 
         ->assertRedirect(scoped_route('dashboard', $team));
 
     expect($user->belongsToTeam($team))->toBeTrue();
-    assertDatabaseMissing('team_invitations', ['id' => $invitation->id]);
+    expect($invitation->refresh()->accepted_at)->not->toBeNull();
+    assertDatabaseHas('team_invitations', ['id' => $invitation->id]);
 });
 
 it('allows bulk invitation acceptance when email casing differs from the user email', function (): void {
@@ -40,7 +40,8 @@ it('allows bulk invitation acceptance when email casing differs from the user em
         ->assertSessionHas('success');
 
     expect($user->fresh()->belongsToTeam($team))->toBeTrue();
-    assertDatabaseMissing('team_invitations', ['id' => $invitation->id]);
+    expect($invitation->refresh()->accepted_at)->not->toBeNull();
+    assertDatabaseHas('team_invitations', ['id' => $invitation->id]);
 });
 
 it('allows invitation acceptance when email casing differs from the user email', function (): void {
@@ -54,7 +55,41 @@ it('allows invitation acceptance when email casing differs from the user email',
         ->assertRedirect(scoped_route('dashboard', $team));
 
     expect($user->belongsToTeam($team))->toBeTrue();
-    assertDatabaseMissing('team_invitations', ['id' => $invitation->id]);
+    expect($invitation->refresh()->accepted_at)->not->toBeNull();
+    assertDatabaseHas('team_invitations', ['id' => $invitation->id]);
+});
+
+it('rejects already accepted invitations from signed urls', function (): void {
+    $user = User::factory()->create();
+    $team = Team::factory()->create();
+    $invitation = TeamInvitation::factory()->create([
+        'accepted_at' => now(),
+        'team_id' => $team->id,
+        'email' => $user->email,
+    ]);
+    $acceptUrl = URL::temporarySignedRoute('team.invitations.mail.accept', now()->addDay(), ['invitation' => $invitation]);
+
+    actingAs($user)->get($acceptUrl)->assertForbidden();
+
+    expect($user->fresh()->belongsToTeam($team))->toBeFalse();
+    assertDatabaseHas('team_invitations', ['id' => $invitation->id]);
+});
+
+it('rejects already accepted invitations from bulk acceptance', function (): void {
+    $user = User::factory()->create();
+    $team = Team::factory()->create();
+    $invitation = TeamInvitation::factory()->create([
+        'accepted_at' => now(),
+        'team_id' => $team->id,
+        'email' => $user->email,
+    ]);
+
+    actingAs($user)
+        ->post(route('teams.invitations.accept'), ['invitations' => [$invitation->id]])
+        ->assertForbidden();
+
+    expect($user->fresh()->belongsToTeam($team))->toBeFalse();
+    assertDatabaseHas('team_invitations', ['id' => $invitation->id]);
 });
 
 it('fails if a user tries to accept an invitation for another email address', function (): void {

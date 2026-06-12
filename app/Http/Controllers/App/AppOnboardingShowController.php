@@ -20,6 +20,7 @@ class AppOnboardingShowController extends Controller
             'invitations' => TeamInvitationData::collect(
                 TeamInvitation::with('team')
                     ->whereRaw('lower(email) = ?', [EmailAddress::normalize($request->user()?->email)])
+                    ->pending()
                     ->get()
             ),
         ]);

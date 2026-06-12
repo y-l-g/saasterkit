@@ -19,6 +19,7 @@ final readonly class TeamInvitationsAcceptController
         $user = $request->user();
         $invitations = TeamInvitation::with('team')
             ->whereIn('id', $request->validated('invitations'))
+            ->pending()
             ->get();
 
         DB::transaction(function () use ($user, $invitations): void {
@@ -31,7 +32,14 @@ final readonly class TeamInvitationsAcceptController
                 $user->teams()->attach($teamsToAttach->all());
             }
 
-            TeamInvitation::query()->whereIn('id', $invitations->pluck('id'))->delete();
+            $acceptedAt = now();
+
+            TeamInvitation::query()
+                ->whereIn('id', $invitations->pluck('id'))
+                ->update([
+                    'accepted_at' => $acceptedAt,
+                    'updated_at' => $acceptedAt,
+                ]);
         });
 
         $user->refresh();

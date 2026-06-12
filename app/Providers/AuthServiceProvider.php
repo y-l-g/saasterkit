@@ -33,6 +33,10 @@ class AuthServiceProvider extends ServiceProvider
         });
 
         Gate::define(AuthEnum::ACCEPT_TEAM_INVITATION, function (User $user, TeamInvitation $invitation) {
+            if (! $invitation->isPending()) {
+                return Response::deny('This invitation is no longer pending.');
+            }
+
             return EmailAddress::matches($user->email, $invitation->email)
                 ? Response::allow()
                 : Response::deny("You're trying to accept an invitation with the wrong account. Please log in with the email address to which the invitation was sent.");

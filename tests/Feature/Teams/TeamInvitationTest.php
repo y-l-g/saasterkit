@@ -61,6 +61,39 @@ it('allows an authorized user to cancel a pending invitation', function (): void
     assertDatabaseMissing('team_invitations', ['id' => $invitation->id]);
 });
 
+it('does not allow accepted invitations to be canceled', function (): void {
+    $invitation = TeamInvitation::factory()->create([
+        'accepted_at' => now(),
+        'team_id' => $this->team->id,
+    ]);
+
+    actingAs($this->owner)
+        ->delete(route('teams.invitations.destroy', $invitation))
+        ->assertSessionHasErrors('invitation');
+
+    assertDatabaseHas('team_invitations', ['id' => $invitation->id]);
+});
+
+it('allows a new invitation after an earlier one was accepted', function (): void {
+    TeamInvitation::factory()->create([
+        'accepted_at' => now(),
+        'team_id' => $this->team->id,
+        'email' => 'member@example.com',
+    ]);
+
+    actingAs($this->owner)
+        ->post(scoped_route('teams.members.store', $this->team), [
+            'email' => 'member@example.com',
+            'role' => 'editor',
+        ])
+        ->assertSessionHas('success');
+
+    expect(TeamInvitation::query()
+        ->where('team_id', $this->team->id)
+        ->where('email', 'member@example.com')
+        ->count())->toBe(2);
+});
+
 it('sends team invitation emails with expiring signed links', function (): void {
     $invitation = TeamInvitation::factory()->create(['team_id' => $this->team->id]);
 

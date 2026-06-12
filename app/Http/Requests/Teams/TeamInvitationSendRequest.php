@@ -42,7 +42,9 @@ class TeamInvitationSendRequest extends FormRequest
             'email' => [
                 'required',
                 'email',
-                Rule::unique('team_invitations')->where('team_id', $team->id),
+                Rule::unique('team_invitations')
+                    ->where('team_id', $team->id)
+                    ->whereNull('accepted_at'),
             ],
             'role' => ['required', 'string', Rule::enum(RoleEnum::class)],
         ];
@@ -75,6 +77,13 @@ class TeamInvitationSendRequest extends FormRequest
 
                 if ($team->hasUserWithEmail($email)) {
                     $validator->errors()->add('email', 'This user already belongs to the team.');
+                }
+
+                if (! $validator->errors()->has('email') && $team->teamInvitations()
+                    ->whereRaw('lower(email) = ?', [$email])
+                    ->pending()
+                    ->exists()) {
+                    $validator->errors()->add('email', 'An invitation has already been sent to this user.');
                 }
             },
         ];

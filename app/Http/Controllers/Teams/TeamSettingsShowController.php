@@ -23,7 +23,11 @@ final readonly class TeamSettingsShowController
 
         Gate::authorize(TeamMemberPermissionEnum::TEAM_VIEW, $team);
 
-        $team->load('owner', 'teamInvitations', 'defaultSubscription');
+        $team->load([
+            'owner',
+            'defaultSubscription',
+            'teamInvitations' => fn ($query) => $query->pending(),
+        ]);
 
         return Inertia::render('teams/TeamSettings', [
             'team' => TeamData::from($team),

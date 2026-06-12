@@ -35,6 +35,7 @@ class UserTeamIndexShowController extends Controller
             'invitations' => TeamInvitationData::collect(
                 TeamInvitation::with('team')
                     ->whereRaw('lower(email) = ?', [EmailAddress::normalize($user->email)])
+                    ->pending()
                     ->get(),
             ),
         ]);
