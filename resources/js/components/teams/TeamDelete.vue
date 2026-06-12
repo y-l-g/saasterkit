@@ -67,7 +67,7 @@ const goToPortal = () => {
             >
         </template>
         <UModal
-            v-if="!team.subscription?.id"
+            v-if="!team.subscription?.valid"
             v-model="confirmingTeamDeletion"
             title="Delete Team"
             description="Are you sure you want to delete this team? Once a team is

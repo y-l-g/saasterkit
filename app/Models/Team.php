@@ -154,7 +154,7 @@ class Team extends Model
      */
     public function defaultSubscription(): HasOne
     {
-        return $this->hasOne(Subscription::class)->where('type', 'default');
+        return $this->hasOne(Subscription::class)->where('type', 'default')->latestOfMany();
     }
 
     public function purge(): void

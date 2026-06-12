@@ -25,6 +25,43 @@ const breadcrumbs = computed(() => [
 ]);
 
 const isProcessingCheckout = ref(false);
+const subscriptionNotice = computed(() => {
+    const subscription = props.team.subscription;
+
+    if (!subscription || (subscription.valid && !subscription.onGracePeriod)) {
+        return null;
+    }
+
+    if (subscription.onGracePeriod) {
+        return {
+            color: 'warning' as const,
+            title: 'Subscription ending',
+            description:
+                'This subscription has been canceled and remains available until the end of the billing period.',
+            actionLabel: 'Resume Subscription',
+            showCheckout: false,
+        };
+    }
+
+    if (subscription.status === 'canceled') {
+        return {
+            color: 'neutral' as const,
+            title: 'Subscription ended',
+            description:
+                'This team is back on the free plan and can start a new subscription.',
+            actionLabel: null,
+            showCheckout: true,
+        };
+    }
+
+    return {
+        color: 'warning' as const,
+        title: 'Subscription pending',
+        description: 'Stripe has not marked this subscription active yet.',
+        actionLabel: 'Manage Subscription',
+        showCheckout: false,
+    };
+});
 
 const handleSubscribeForTeam = ({
     stripePriceId,
@@ -127,49 +164,64 @@ const goToPortal = () => {
                         :loading="isProcessingCheckout"
                     />
                 </div>
-                <div
-                    v-if="
-                        team.subscription &&
-                        team.subscription.onGracePeriod &&
-                        team.subscription.endsAt
-                    "
-                    class="space-y-3"
-                >
-                    <p>
-                        You have cancelled your
+                <div v-else-if="subscriptionNotice" class="space-y-4">
+                    <UAlert
+                        :color="subscriptionNotice.color"
+                        variant="soft"
+                        :title="subscriptionNotice.title"
+                        :description="subscriptionNotice.description"
+                    />
+                    <p
+                        v-if="
+                            team.subscription.onGracePeriod &&
+                            team.subscription.endsAt
+                        "
+                    >
+                        You have canceled your
                         <strong>{{ team.subscription.plan.name }}</strong>
-                        plan. Your access will end
+                        plan. Your access ends
                         {{
                             useTimeAgoIntl(team.subscription.endsAt, {
                                 locale: 'en',
                             })
-                        }}
-                        >.
+                        }}.
                     </p>
                     <UButton
+                        v-if="subscriptionNotice.actionLabel"
                         @click="goToPortal()"
                         :loading="isRedirecting"
                         variant="subtle"
                     >
-                        Resume Subscription
+                        {{ subscriptionNotice.actionLabel }}
                     </UButton>
+                    <PricingPlans
+                        v-if="subscriptionNotice.showCheckout"
+                        class="mt-8"
+                        orientation="column"
+                        :on-subscribe="handleSubscribeForTeam"
+                        :loading="isProcessingCheckout"
+                    />
                 </div>
-                <div v-if="team.subscription && !team.subscription.endsAt">
-                    <div
+                <div v-else-if="team.subscription?.valid" class="space-y-3">
+                    <p
                         v-if="
                             team.subscription.status === 'trialing' &&
-                            team.subscription.endsAt
+                            team.subscription.trialEndsAt
                         "
-                    ></div>
-                    <p>
-                        Your team is on trial on the
+                    >
+                        Your team is trialing the
                         <strong>{{ team.subscription.plan.name }}</strong>
-                        plan. Trial will ends
+                        plan. Trial ends
                         {{
                             useTimeAgoIntl(team.subscription.trialEndsAt!, {
                                 locale: 'en',
                             })
-                        }}
+                        }}.
+                    </p>
+                    <p v-else>
+                        Your team is subscribed to the
+                        <strong>{{ team.subscription.plan.name }}</strong>
+                        plan.
                     </p>
 
                     <UButton

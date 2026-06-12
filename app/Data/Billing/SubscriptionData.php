@@ -25,6 +25,8 @@ final class SubscriptionData extends Data
         public readonly SubscriptionStatusEnum $status,
         #[WithCast(DateTimeInterfaceCast::class)]
         public readonly ?DateTime $endsAt,
+        public readonly bool $active,
+        public readonly bool $valid,
         public readonly bool $onGracePeriod,
         public readonly PlanData $plan,
         public readonly string $stripePriceId,
@@ -44,6 +46,8 @@ final class SubscriptionData extends Data
             id: $subscription->id,
             status: SubscriptionStatusEnum::from($subscription->stripe_status),
             endsAt: $subscription->ends_at,
+            active: (bool) $subscription->active(),
+            valid: (bool) $subscription->valid(),
             onGracePeriod: (bool) $subscription->onGracePeriod(),
             plan: $subscription->planData,
             stripePriceId: $subscription->stripe_price,

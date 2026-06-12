@@ -50,6 +50,8 @@ declare namespace App {
                 readonly id: number;
                 readonly status: App.Enums.Billing.SubscriptionStatusEnum;
                 readonly endsAt: string | null;
+                readonly active: boolean;
+                readonly valid: boolean;
                 readonly onGracePeriod: boolean;
                 readonly plan: App.Data.Billing.PlanData;
                 readonly stripePriceId: string;
