@@ -26,6 +26,7 @@ final class TeamData extends Data
         #[WithCast(DateTimeInterfaceCast::class)]
         public readonly DateTime $createdAt,
         public readonly string $name,
+        public readonly string $slug,
         public readonly Lazy|TeamMemberData $owner,
         public readonly Lazy|Collection $invitations,
         public readonly Lazy|null|SubscriptionData $subscription,
@@ -36,6 +37,7 @@ final class TeamData extends Data
         return new self(
             id: $team->id,
             name: $team->name,
+            slug: $team->slug,
             userId: $team->user_id,
             createdAt: $team->created_at,
             owner: Lazy::whenLoaded('owner', $team, fn () => TeamMemberData::from($team->owner)),

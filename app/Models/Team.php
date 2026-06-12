@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Models\Concerns\GeneratesUniqueTeamSlugs;
 use App\Models\Concerns\HasPlanFeatures;
 use App\Observers\TeamObserver;
 use Database\Factories\TeamFactory;
@@ -25,6 +26,7 @@ use Laravel\Cashier\Billable;
  * @property int $id
  * @property int $user_id
  * @property string $name
+ * @property string|null $slug
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property string|null $stripe_id
@@ -55,6 +57,7 @@ use Laravel\Cashier\Billable;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Team wherePmLastFour($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Team wherePmType($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Team whereStripeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Team whereSlug($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Team whereTrialEndsAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Team whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Team whereUserId($value)
@@ -64,11 +67,34 @@ use Laravel\Cashier\Billable;
 #[ObservedBy([TeamObserver::class])]
 #[Fillable([
     'name',
+    'slug',
 ])]
 class Team extends Model
 {
     /** @use HasFactory<TeamFactory> */
-    use Billable, HasFactory, HasPlanFeatures;
+    use Billable, GeneratesUniqueTeamSlugs, HasFactory, HasPlanFeatures;
+
+    protected static function boot(): void
+    {
+        parent::boot();
+
+        static::creating(function (Team $team): void {
+            if (blank($team->slug)) {
+                $team->slug = static::generateUniqueTeamSlug($team->name);
+            }
+        });
+
+        static::updating(function (Team $team): void {
+            if ($team->isDirty('name')) {
+                $team->slug = static::generateUniqueTeamSlug($team->name, $team->id);
+            }
+        });
+    }
+
+    public function getRouteKeyName(): string
+    {
+        return 'slug';
+    }
 
     /**
      * @return BelongsTo<User, $this>

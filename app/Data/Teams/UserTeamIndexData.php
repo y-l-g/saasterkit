@@ -15,6 +15,7 @@ final class UserTeamIndexData extends Data
     public function __construct(
         public readonly int $id,
         public readonly string $name,
+        public readonly string $slug,
         public readonly bool $isOwner,
         public readonly bool $isCurrentTeam,
     ) {}
@@ -24,6 +25,7 @@ final class UserTeamIndexData extends Data
         return new self(
             id: $team->id,
             name: $team->name,
+            slug: $team->slug,
             isOwner: $team->user_id === $currentUser->id,
             isCurrentTeam: $team->id === $currentUser->current_team_id,
         );
