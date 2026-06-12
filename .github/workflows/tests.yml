@@ -43,6 +43,15 @@ jobs:
       - name: Build Assets
         run: npm run build
 
+      - name: Frontend Lint
+        run: npm run lint:check
+
+      - name: Frontend Types
+        run: npm run types:check
+
+      - name: Frontend Format
+        run: npm run format:check
+
       - name: Tests
         env:
           STRIPE_KEY: ${{ secrets.STRIPE_KEY }}
@@ -51,10 +60,10 @@ jobs:
           STRIPE_PRICE_PREMIUM_YEAR: ${{ secrets.STRIPE_PRICE_PREMIUM_YEAR }}
           STRIPE_PRICE_PRO_MONTH: ${{ secrets.STRIPE_PRICE_PRO_MONTH }}
           STRIPE_PRICE_PRO_YEAR: ${{ secrets.STRIPE_PRICE_PRO_YEAR }}
-        run: ./vendor/bin/pest
+        run: ./vendor/bin/pest --ci
 
       - name: Larastan
         run: ./vendor/bin/phpstan analyse --memory-limit=2G
 
       - name: Pint
-        run: ./vendor/bin/pint
+        run: ./vendor/bin/pint --test
