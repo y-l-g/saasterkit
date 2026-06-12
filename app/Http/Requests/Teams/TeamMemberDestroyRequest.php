@@ -49,5 +49,7 @@ class TeamMemberDestroyRequest extends FormRequest
         throw_if($team->owner->is($member), ValidationException::withMessages([
             'member' => 'You may not leave a team that you created.',
         ]));
+
+        abort_unless($team->users()->whereKey($member->id)->exists(), 404);
     }
 }

@@ -46,3 +46,19 @@ it('prevents the team owner from being removed or leaving the team', function ()
         ->delete(scoped_route('teams.members.destroy', $this->team, ['user' => $this->owner]))
         ->assertSessionHasErrors();
 });
+
+it('rejects role updates for users who are not team members', function (): void {
+    $nonMember = User::factory()->create();
+
+    actingAs($this->owner)
+        ->put(scoped_route('teams.members.update', $this->team, ['user' => $nonMember]), ['role' => 'admin'])
+        ->assertNotFound();
+});
+
+it('rejects removals for users who are not team members', function (): void {
+    $nonMember = User::factory()->create();
+
+    actingAs($this->owner)
+        ->delete(scoped_route('teams.members.destroy', $this->team, ['user' => $nonMember]))
+        ->assertNotFound();
+});
