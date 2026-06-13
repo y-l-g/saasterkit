@@ -24,7 +24,7 @@ it('allows a user to start a checkout session', function (): void {
     $priceId = $plan->prices['month'];
 
     actingAs($user)
-        ->get(scoped_route('billing.checkout', $team, ['stripePriceId' => $priceId]))
+        ->post(scoped_route('billing.checkout', $team, ['stripePriceId' => $priceId]))
         ->assertRedirectContains('https://checkout.stripe.com');
 });
 
@@ -36,6 +36,29 @@ it('allows a user to be redirected to the billing portal', function (): void {
     $team->createAsStripeCustomer();
 
     actingAs($user)
-        ->get(scoped_route('billing.portal', $team))
+        ->post(scoped_route('billing.portal', $team))
         ->assertRedirectContains('https://billing.stripe.com');
+});
+
+it('does not allow checkout sessions to be started with GET requests', function (): void {
+    $user = User::factory()->create();
+    $team = Team::factory()->create(['user_id' => $user->id]);
+
+    /** @var PlanService $planService */
+    $planService = resolve(PlanService::class);
+    $plan = $planService->all()->first();
+    $priceId = $plan->prices['month'];
+
+    actingAs($user)
+        ->get(scoped_route('billing.checkout', $team, ['stripePriceId' => $priceId]))
+        ->assertStatus(405);
+});
+
+it('does not allow billing portal sessions to be started with GET requests', function (): void {
+    $user = User::factory()->create();
+    $team = Team::factory()->create(['user_id' => $user->id]);
+
+    actingAs($user)
+        ->get(scoped_route('billing.portal', $team))
+        ->assertStatus(405);
 });

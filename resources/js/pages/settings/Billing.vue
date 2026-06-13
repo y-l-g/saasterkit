@@ -69,7 +69,7 @@ const handleSubscribeForTeam = ({
     stripePriceId: string;
 }) => {
     isProcessingCheckout.value = true;
-    router.get(
+    router.post(
         checkout({
             current_team: props.team.slug,
             stripePriceId: stripePriceId,
@@ -133,7 +133,7 @@ const isRedirecting = ref(false);
 
 const goToPortal = () => {
     isRedirecting.value = true;
-    router.get(
+    router.post(
         portal(props.team.slug).url,
         {},
         {

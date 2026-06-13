@@ -9,8 +9,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('settings/billing', ShowBillingSettingsController::class)->name('billing.show');
 
-Route::get('settings/billing/checkout/{stripePriceId}', CreateStripeCheckoutController::class)
+Route::post('settings/billing/checkout/{stripePriceId}', CreateStripeCheckoutController::class)
     ->name('billing.checkout');
 
-Route::get('settings/billing/portal', RedirectToBillingPortalController::class)
+Route::post('settings/billing/portal', RedirectToBillingPortalController::class)
     ->name('billing.portal');
