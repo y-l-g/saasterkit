@@ -17,19 +17,21 @@ use function Pest\Laravel\get;
 
 uses(RefreshDatabase::class);
 
-function mockSocialiteProvider(string $email = 'test@example.com', string $name = 'Test User', string $id = '12345'): void
-{
-    $socialiteUser = Mockery::mock(SocialiteUser::class);
-    $socialiteUser->allows('getId')->andReturn($id);
-    $socialiteUser->allows('getName')->andReturn($name);
-    $socialiteUser->allows('getEmail')->andReturn($email);
-    $socialiteUser->token = 'test-token';
-    $socialiteUser->refreshToken = 'test-refresh-token';
+if (! function_exists('mockSocialiteProvider')) {
+    function mockSocialiteProvider(string $email = 'test@example.com', string $name = 'Test User', string $id = '12345'): void
+    {
+        $socialiteUser = Mockery::mock(SocialiteUser::class);
+        $socialiteUser->allows('getId')->andReturn($id);
+        $socialiteUser->allows('getName')->andReturn($name);
+        $socialiteUser->allows('getEmail')->andReturn($email);
+        $socialiteUser->token = 'test-token';
+        $socialiteUser->refreshToken = 'test-refresh-token';
 
-    $provider = Mockery::mock(GoogleProvider::class);
-    $provider->allows('stateless->user')->andReturn($socialiteUser);
+        $provider = Mockery::mock(GoogleProvider::class);
+        $provider->allows('stateless->user')->andReturn($socialiteUser);
 
-    Socialite::shouldReceive('driver')->with('google')->andReturn($provider);
+        Socialite::shouldReceive('driver')->with('google')->andReturn($provider);
+    }
 }
 
 it('can register and authenticate a new user via socialite', function (): void {
