@@ -23,7 +23,7 @@ if (! function_exists('mockSocialiteProvider')) {
         $socialiteUser->refreshToken = 'test-refresh-token';
 
         $provider = Mockery::mock(GoogleProvider::class);
-        $provider->allows('stateless->user')->andReturn($socialiteUser);
+        $provider->allows('user')->andReturn($socialiteUser);
 
         Socialite::shouldReceive('driver')->with('google')->andReturn($provider);
     }

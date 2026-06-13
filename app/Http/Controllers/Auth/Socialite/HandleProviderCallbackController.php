@@ -27,7 +27,7 @@ final readonly class HandleProviderCallbackController
     {
         /** @var AbstractProvider $driver */
         $driver = $socialite->driver($provider);
-        $socialiteUser = $driver->stateless()->user();
+        $socialiteUser = $driver->user();
         assert($socialiteUser instanceof SocialiteUser);
 
         if ($this->guard->check()) {
