@@ -34,10 +34,7 @@ enum RoleEnum: string
     public function permissions(): array
     {
         return match ($this) {
-            self::ADMIN => [
-                TeamMemberPermissionEnum::TEAM_VIEW,
-                TeamMemberPermissionEnum::TEAM_UPDATE,
-            ],
+            self::ADMIN => TeamMemberPermissionEnum::cases(),
             self::EDITOR => [
                 TeamMemberPermissionEnum::TEAM_VIEW,
             ],

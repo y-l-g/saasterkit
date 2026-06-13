@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Enums\Teams\RoleEnum;
 use App\Models\Team;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -25,8 +26,32 @@ it('allows an authorized user to update a team members role', function (): void 
     expect($this->member->teamRole($this->team)->value)->toBe('admin');
 });
 
+it('allows an admin member to update another team members role', function (): void {
+    $admin = User::factory()->create();
+    $this->team->users()->syncWithPivotValues($admin->id, ['role' => RoleEnum::ADMIN->value], false);
+    $admin->switchToTeam($this->team);
+
+    actingAs($admin)
+        ->put(scoped_route('teams.members.update', $this->team, ['user' => $this->member]), ['role' => RoleEnum::ADMIN->value])
+        ->assertSessionHas('success');
+
+    expect($this->member->teamRole($this->team))->toBe(RoleEnum::ADMIN);
+});
+
 it('allows an authorized user to remove a team member', function (): void {
     actingAs($this->owner)
+        ->delete(scoped_route('teams.members.destroy', $this->team, ['user' => $this->member]))
+        ->assertSessionHas('success');
+
+    expect($this->team->fresh()->hasUser($this->member))->toBeFalse();
+});
+
+it('allows an admin member to remove another team member', function (): void {
+    $admin = User::factory()->create();
+    $this->team->users()->syncWithPivotValues($admin->id, ['role' => RoleEnum::ADMIN->value], false);
+    $admin->switchToTeam($this->team);
+
+    actingAs($admin)
         ->delete(scoped_route('teams.members.destroy', $this->team, ['user' => $this->member]))
         ->assertSessionHas('success');
 

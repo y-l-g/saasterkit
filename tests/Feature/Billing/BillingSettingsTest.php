@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Enums\Teams\RoleEnum;
 use App\Models\Subscription;
 use App\Models\Team;
 use App\Models\User;
@@ -36,6 +37,21 @@ it('renders the billing settings page for a team owner', function (): void {
                 ->component('settings/Billing')
                 ->missing('invoices')
                 ->loadDeferredProps(fn (Assert $reload) => $reload->has('invoices', 0))
+        );
+});
+
+it('renders the billing settings page for an admin team member', function (): void {
+    $admin = User::factory()->create();
+    $this->team->users()->syncWithPivotValues($admin->id, ['role' => RoleEnum::ADMIN->value], false);
+    $admin->switchToTeam($this->team);
+
+    actingAs($admin)
+        ->get(scoped_route('billing.show', $this->team))
+        ->assertOk()
+        ->assertInertia(
+            fn (Assert $page) => $page
+                ->component('settings/Billing')
+                ->missing('invoices')
         );
 });
 

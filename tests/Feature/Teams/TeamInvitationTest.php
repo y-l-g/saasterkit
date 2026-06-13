@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Enums\Teams\RoleEnum;
 use App\Models\Team;
 use App\Models\TeamInvitation;
 use App\Models\User;
@@ -37,6 +38,21 @@ it('allows an authorized user to send a team invitation', function (): void {
             return $notifiable->routes['mail'] === 'new@member.com';
         }
     );
+});
+
+it('allows an admin member to send a team invitation', function (): void {
+    $admin = User::factory()->create();
+    $this->team->users()->syncWithPivotValues($admin->id, ['role' => RoleEnum::ADMIN->value], false);
+    $admin->switchToTeam($this->team);
+
+    actingAs($admin)
+        ->post(scoped_route('teams.members.store', $this->team), [
+            'email' => '  Admin.Invited@Member.COM  ',
+            'role' => RoleEnum::EDITOR->value,
+        ])
+        ->assertSessionHas('success');
+
+    assertDatabaseHas('team_invitations', ['email' => 'admin.invited@member.com']);
 });
 
 it('fails if the user is already a member of the team', function (): void {
