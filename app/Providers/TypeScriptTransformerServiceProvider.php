@@ -23,7 +23,7 @@ class TypeScriptTransformerServiceProvider extends BaseTypeScriptTransformerServ
             ->replaceType(DateTime::class, 'string')
             ->replaceType(DateTimeInterface::class, 'string')
             ->transformDirectories(app_path())
-            ->writer(new GlobalNamespaceWriter(resource_path('types/generated.d.ts')))
+            ->writer(new GlobalNamespaceWriter('../types/generated.d.ts'))
             ->formatter(PrettierFormatter::class);
     }
 }

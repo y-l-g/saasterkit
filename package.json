@@ -11,7 +11,8 @@
         "lint": "eslint . --fix",
         "lint:check": "eslint .",
         "test:frontend": "node --test tests/Frontend/*.test.mts",
-        "types:check": "vue-tsc --noEmit"
+        "types:generate": "php artisan typescript:transform --no-interaction",
+        "types:check": "npm run types:generate && vue-tsc --noEmit"
     },
     "devDependencies": {
         "@eslint/js": "^10.0.1",
