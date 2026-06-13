@@ -18,19 +18,34 @@ Save weeks of development time with essential SaaS features already built, teste
 
 ## 🏛️ Architectural Pillars
 
-- **Robust & Modern Backend**: Built on the latest **Laravel 12** with **PHP 8.4**. We enforce strict typing and high code quality standards for a robust foundation.
+- **Robust & Modern Backend**: Built on the latest **Laravel 13** with **PHP 8.5**. We enforce strict typing and high code quality standards for a robust foundation.
 - **Clean & Scalable Architecture**: Logic is neatly organized for scalability. Data integrity is guaranteed by strongly-typed DTOs via `Spatie/Laravel-Data`.
-- **SEO-Ready with SSR**: **Server-Side Rendering** is ready out-of-the-box with Nuxt, ensuring optimal performance and excellent SEO for your public-facing pages.
+- **SEO-Ready with SSR**: **Server-Side Rendering** is ready through Inertia and Vite.
+  Nuxt UI powers the component layer.
 
 ## 🛠️ Tech Stack
 
-- **Backend**: Laravel 12
+- **Backend**: Laravel 13 on PHP 8.5
 - **Frontend**: Vue 3
 - **UI Framework**: Nuxt UI 4
 - **Backend/Frontend Bridge**: Inertia.js
+- **Build Tooling**: Vite with Inertia SSR support
 - **Billing**: Laravel Cashier (Stripe)
 - **Authentication**: Laravel Fortify
 - **Deployment**: Ready for production.
+
+## Local Commands
+
+- Install/setup: `composer run setup`
+- Dev server: `composer run dev`
+- Build: `npm run build`
+- SSR build: `npm run build:ssr`
+- Backend tests: `php artisan test --compact`
+- Frontend tests: `npm run test:frontend`
+- Typecheck: `npm run types:check`
+- Lint: `npm run lint:check`
+- Format check: `npm run format:check`
+- Static analysis: `vendor/bin/phpstan analyse --memory-limit=2G`
 
 ## 🚀 Getting Started
 
