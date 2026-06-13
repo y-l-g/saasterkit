@@ -21,6 +21,7 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Laravel\Cashier\Billable;
+use Laravel\Cashier\SubscriptionItem;
 
 /**
  * @property int $id
@@ -162,6 +163,15 @@ class Team extends Model
         DB::transaction(function (): void {
             User::query()->where('current_team_id', $this->id)
                 ->update(['current_team_id' => null]);
+
+            $subscriptionIds = $this->subscriptions()->pluck('id');
+
+            SubscriptionItem::query()
+                ->whereIn('subscription_id', $subscriptionIds)
+                ->delete();
+
+            $this->subscriptions()->delete();
+
             $this->users()->detach();
             $this->delete();
         });
