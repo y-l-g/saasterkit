@@ -20,7 +20,7 @@
         "@inertiajs/vite": "^3.4.0",
         "@laravel/vite-plugin-wayfinder": "^0.1.7",
         "@tailwindcss/typography": "^0.5.20",
-        "@tailwindcss/vite": "^4.3.0",
+        "@tailwindcss/vite": "^4.3.2",
         "@types/node": "^25.9.3",
         "@unhead/bundler": "^3.1.4",
         "@vitejs/plugin-vue": "^6.0.7",
@@ -52,7 +52,7 @@
     },
     "optionalDependencies": {
         "@rollup/rollup-linux-x64-gnu": "4.61.1",
-        "@tailwindcss/oxide-linux-x64-gnu": "^4.3.0",
+        "@tailwindcss/oxide-linux-x64-gnu": "^4.3.2",
         "lightningcss-linux-x64-gnu": "^1.32.0"
     }
 }
