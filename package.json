@@ -16,7 +16,7 @@
     },
     "devDependencies": {
         "@eslint/js": "^10.0.1",
-        "@iconify-json/lucide": "^1.2.111",
+        "@iconify-json/lucide": "^1.2.115",
         "@inertiajs/vite": "^3.4.0",
         "@laravel/vite-plugin-wayfinder": "^0.1.7",
         "@tailwindcss/typography": "^0.5.20",
