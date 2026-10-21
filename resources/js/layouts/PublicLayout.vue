@@ -9,6 +9,9 @@ import ILucideDollarSign from '~icons/lucide/dollar-sign';
 import ILucideGithub from '~icons/lucide/github';
 
 const page = usePage();
+const logoutUser = (): void => {
+    router.post(logout().url);
+};
 const dashboardUrl = computed(() =>
     page.props.user?.currentTeam
         ? dashboard(page.props.user.currentTeam.slug).url
@@ -107,7 +110,7 @@ const footerItems: NavigationMenuItem[] = [
                 />
                 <UButton
                     label="Log Out"
-                    :onclick="() => router.post(logout().url)"
+                    :onclick="logoutUser"
                     variant="soft"
                     color="neutral"
                 />
