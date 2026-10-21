@@ -23,7 +23,7 @@
         "@tailwindcss/vite": "^4.3.3",
         "@types/node": "^26.6.5",
         "@unhead/bundler": "^3.4.3",
-        "@vitejs/devtools-kit": "^0.7.6",
+        "@vitejs/devtools-kit": "^0.8.0",
         "@vitejs/plugin-vue": "^6.0.10",
         "@vue/eslint-config-typescript": "^14.9.0",
         "concurrently": "^10.0.6",
