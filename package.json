@@ -52,7 +52,7 @@
         "esbuild": "^0.28.1"
     },
     "optionalDependencies": {
-        "@rollup/rollup-linux-x64-gnu": "4.64.12",
+        "@rollup/rollup-linux-x64-gnu": "4.66.0",
         "@tailwindcss/oxide-linux-x64-gnu": "^4.3.3",
         "lightningcss-linux-x64-gnu": "^1.33.0"
     }
