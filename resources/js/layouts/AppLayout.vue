@@ -48,7 +48,7 @@ const bottomlinks: NavigationMenuItem[] = [
     {
         label: 'Documentation',
         icon: 'i-lucide-info',
-        to: 'https://doc.saasterkit.com',
+        to: 'https://doc.saasterkit.y-l.fr',
         target: '_blank',
         rel: 'noopener noreferrer',
     },

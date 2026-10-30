@@ -51,7 +51,7 @@ Save weeks of development time with essential SaaS features already built, teste
 
 For full installation instructions and configuration details, please visit our official documentation:
 
-**[doc.saasterkit.com](https://doc.saasterkit.com)**
+**[doc.saasterkit.y-l.fr](https://doc.saasterkit.y-l.fr)**
 
 The documentation provides a complete guide to getting your project up and running.
 

@@ -45,7 +45,7 @@ const footerItems: NavigationMenuItem[] = [
     },
     {
         label: 'Documentation',
-        to: 'https://doc.saasterkit.com',
+        to: 'https://doc.saasterkit.y-l.fr',
         target: '_blank',
         rel: 'noopener noreferrer',
     },
